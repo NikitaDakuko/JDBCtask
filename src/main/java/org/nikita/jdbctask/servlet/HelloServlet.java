@@ -1,4 +1,4 @@
-package org.nikita.jdbctask;
+package org.nikita.jdbctask.servlet;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

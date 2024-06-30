@@ -1,11 +1,11 @@
-package org.nikita.jdbctask;
+package org.nikita.jdbctask.servlet;
 
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
-@WebServlet("/storePreferences")
+@WebServlet("/CreateProduct")
 public class StorePreferencesServlet extends HttpServlet {
 
     @Override
