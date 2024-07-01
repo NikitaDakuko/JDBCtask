@@ -1,6 +1,6 @@
-package org.nikita.jdbctask.resource;
+package org.nikita.jdbctask.controller;
 
-import jakarta.enterprise.context.RequestScoped;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -8,11 +8,9 @@ import jakarta.ws.rs.core.Response;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.entity.Product;
 
-@RequestScoped
 @Path("products")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class ProductResource {
+public class ProductController {
 
     @Inject
     ProductDAO productDAO;
@@ -52,4 +50,5 @@ public class ProductResource {
         productDAO.delete(productDAO.findById(id));
         return Response.ok().build();
     }
+
 }
