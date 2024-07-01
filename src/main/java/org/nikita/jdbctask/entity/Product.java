@@ -18,6 +18,11 @@ public class Product implements Serializable {
     private int quantity;
     private boolean available;
 
+    public Product(Long id, String name, Money price, int quantity, boolean available){
+        this(name, price, quantity, available);
+        this.id = id;
+    }
+
     public Product(String name, Money price, int quantity, boolean available) {
         this.name = name;
         this.price = price;

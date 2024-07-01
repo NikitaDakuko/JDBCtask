@@ -1,22 +1,26 @@
-package org.nikita.jdbctask.servlet;
+package org.nikita.jdbctask.servlet.product;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.entity.Money;
 import org.nikita.jdbctask.entity.Product;
 
 import java.io.IOException;
 
-@WebServlet("/product")
-public class ProductServlet extends HttpServlet {
+@WebServlet("/createProduct")
+public class CreateProductServlet extends HttpServlet {
+
+    @Inject
+    ProductDAO productDAO;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/product.html").forward(req, resp);
-
     }
 
     @Override
