@@ -12,11 +12,11 @@ import java.io.Serializable;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private final long id;
-    private final String name;
-    private final Money price;
-    private final int quantity;
-    private final boolean available;
+    private long id;
+    private String name;
+    private Money price;
+    private int quantity;
+    private boolean available;
 
     public Product(int id, String name, Money price, int quantity, boolean available) {
         this.id = id;
@@ -26,24 +26,40 @@ public class Product implements Serializable {
         this.available = available;
     }
 
-    public long id() {
+    public long getId() {
         return id;
     }
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
-    public Money price() {
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public Money getPrice() {
         return price;
     }
 
-    public int quantity() {
+    public void setPrice(Money price){
+        this.price = price;
+    }
+
+    public int getQuantity() {
         return quantity;
     }
 
-    public boolean available() {
+    public void setQuantity(int quantity){
+        this.quantity = quantity;
+    }
+
+    public boolean getAvailability() {
         return available;
+    }
+
+    public void setAvailability(boolean available){
+        this.available = available;
     }
 
     @Override
