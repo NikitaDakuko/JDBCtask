@@ -1,6 +1,18 @@
 package org.nikita.jdbctask.entity;
 
-public class Money {
-    private int value;
-    private String currency;
+import java.io.Serializable;
+
+public class Money implements Serializable {
+    private final int value;
+    private final String currency;
+
+    public Money(int value, String currency){
+        this.value = value;
+        this.currency = currency;
+    }
+
+    @Override
+    public String toString(){
+        return this.value + " " + this.currency;
+    }
 }

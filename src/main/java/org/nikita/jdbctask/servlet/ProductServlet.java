@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.nikita.jdbctask.entity.Money;
+import org.nikita.jdbctask.entity.Product;
 
 import java.io.IOException;
 
@@ -13,7 +15,23 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.getOutputStream().println("Hello World");
+        req.getRequestDispatcher("/WEB-INF/product.html").forward(req, resp);
 
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String[] coffeeTypes = req.getParameterValues("coffeeType");
+
+        Product p = new Product(
+                req.getParameter("productName"),
+                new Money(
+                        Integer.getInteger(req.getParameter("productPrice")),
+                        req.getParameter("productCurrency")),
+                Integer.getInteger(req.getParameter("productQuantity")),
+                Boolean.getBoolean(req.getParameter("productAvailability")));
+
+
+        resp.getOutputStream().println(p.toString());
     }
 }
