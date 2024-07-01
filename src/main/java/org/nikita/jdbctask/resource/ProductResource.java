@@ -9,7 +9,7 @@ import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.entity.Product;
 
 @RequestScoped
-@Path("products")
+@Path("/products")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProductResource {

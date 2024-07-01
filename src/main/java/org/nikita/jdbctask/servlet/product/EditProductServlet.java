@@ -12,7 +12,7 @@ import org.nikita.jdbctask.entity.Product;
 
 import java.io.IOException;
 
-@WebServlet("/editProduct")
+@WebServlet("/editProduct/{id}")
 public class EditProductServlet extends HttpServlet {
 
     @Inject
@@ -26,7 +26,7 @@ public class EditProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Product p = new Product(
-                5L,
+                0L,
                 req.getParameter("productName"),
                 new Money(
                         Integer.parseInt(req.getParameter("productPrice")),
@@ -35,6 +35,6 @@ public class EditProductServlet extends HttpServlet {
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
         productDAO.update(p);
-        resp.getOutputStream().println(p.toString());
+        resp.getOutputStream().println(p.toString() + " " + req.getPathInfo());
     }
 }
