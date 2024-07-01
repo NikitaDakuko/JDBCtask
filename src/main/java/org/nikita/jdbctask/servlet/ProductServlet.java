@@ -24,9 +24,9 @@ public class ProductServlet extends HttpServlet {
         Product p = new Product(
                 req.getParameter("productName"),
                 new Money(
-                        Integer.getInteger(req.getParameter("productPrice")),
+                        Integer.parseInt(req.getParameter("productPrice")),
                         req.getParameter("productCurrency")),
-                Integer.getInteger(req.getParameter("productQuantity")),
+                Integer.parseInt(req.getParameter("productQuantity")),
                 Boolean.getBoolean(req.getParameter("productAvailability")));
 
         resp.getOutputStream().println(p.toString());
