@@ -21,8 +21,6 @@ public class ProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String[] coffeeTypes = req.getParameterValues("coffeeType");
-
         Product p = new Product(
                 req.getParameter("productName"),
                 new Money(
@@ -30,7 +28,6 @@ public class ProductServlet extends HttpServlet {
                         req.getParameter("productCurrency")),
                 Integer.getInteger(req.getParameter("productQuantity")),
                 Boolean.getBoolean(req.getParameter("productAvailability")));
-
 
         resp.getOutputStream().println(p.toString());
     }
