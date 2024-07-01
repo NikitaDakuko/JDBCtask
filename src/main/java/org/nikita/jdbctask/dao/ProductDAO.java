@@ -10,30 +10,30 @@ import java.util.List;
 @Stateless
 public class ProductDAO {
     @PersistenceContext(unitName = "restapi_PU")
-    static EntityManager entityManager;
+     EntityManager entityManager;
 
-    public static void create(Product product){
+    public void create(Product product){
         entityManager.persist(product);
     }
 
-    public static List<Product> getAll(){
+    public List<Product> getAll(){
         return entityManager.createNamedQuery("product.findAll", Product.class).getResultList();
     }
 
-    public static Product findById(long id){
+    public Product findById(long id){
         return entityManager.find(Product.class, id);
     }
 
-    public static void update(Product product){
+    public void update(Product product){
         entityManager.merge(product);
     }
 
-    public static void delete(Product product){
+    public void delete(Product product){
         if (entityManager.contains(product))
             entityManager.remove(product);
     }
 
-    public static void delete(Long id){
+    public void delete(Long id){
         delete(findById(id));
     }
 
