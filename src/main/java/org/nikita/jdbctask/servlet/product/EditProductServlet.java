@@ -17,9 +17,6 @@ public class EditProductServlet extends HttpServlet {
 
     private Long id;
 
-    @Inject
-    ProductDAO productDAO;
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.id = Long.parseLong(req.getParameter("id"));
@@ -37,7 +34,7 @@ public class EditProductServlet extends HttpServlet {
                 Integer.parseInt(req.getParameter("productQuantity")),
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
-        productDAO.update(p);
+        ProductDAO.update(p);
         resp.getOutputStream().println(p.toString());
     }
 }

@@ -15,9 +15,6 @@ import java.io.IOException;
 @WebServlet("/createProduct")
 public class CreateProductServlet extends HttpServlet {
 
-    @Inject
-    ProductDAO productDAO;
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getRequestDispatcher("/WEB-INF/product.html").forward(req, resp);
@@ -33,6 +30,7 @@ public class CreateProductServlet extends HttpServlet {
                 Integer.parseInt(req.getParameter("productQuantity")),
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
+        ProductDAO.create(p);
         resp.getOutputStream().println(p.toString());
     }
 }
