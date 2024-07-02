@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO implements DAO<Product> {
+    private final String tableName = "public.\"Product\"";
     private final Connection connection = ApplicationConfig.getConnection();
 
     @Override
     public void create(Product product){
         try {
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO products VALUES (NULL, ?, ?, ?, ?)");
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO " + tableName + " VALUES (NULL, ?, ?, ?, ?)");
             statement.setString(1, product.getName());
             statement.setString(2, product.getPrice().toString());
             statement.setString(3, String.valueOf(product.getQuantity()));
@@ -31,7 +33,7 @@ public class ProductDAO implements DAO<Product> {
     public List<Product> getAll(){
         try {
             Statement statement = connection.createStatement();
-            return parseResult(statement.executeQuery("SELECT * FROM products"));
+            return parseResult(statement.executeQuery("SELECT * FROM "+ tableName));
         }
         catch (SQLException e) {
             System.out.println("could not get products, SQLException: "+ e.getMessage());
@@ -43,7 +45,7 @@ public class ProductDAO implements DAO<Product> {
     public Product findById(Long id){
         try {
             Statement statement = connection.createStatement();
-            return parseResult(statement.executeQuery("SELECT * FROM products WHERE id=" + id)).get(0);
+            return parseResult(statement.executeQuery("SELECT * FROM " + tableName + " WHERE id=" + id)).get(0);
         }
         catch (SQLException e) {
             System.out.println("could not find product by id, SQLException: "+ e.getMessage());
