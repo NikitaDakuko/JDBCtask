@@ -1,6 +1,7 @@
 package org.nikita.jdbctask.entity;
 
 import jakarta.persistence.*;
+import org.postgresql.util.PGmoney;
 
 import java.io.Serializable;
 
@@ -12,18 +13,18 @@ import java.io.Serializable;
 public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String name;
-    private Money price;
+    private PGmoney price;
     private int quantity;
     private boolean available;
 
-    public Product(Long id, String name, Money price, int quantity, boolean available){
+    public Product(Long id, String name, PGmoney price, int quantity, boolean available){
         this(name, price, quantity, available);
         this.id = id;
     }
 
-    public Product(String name, Money price, int quantity, boolean available) {
+    public Product(String name, PGmoney price, int quantity, boolean available) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -42,11 +43,11 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public Money getPrice() {
+    public PGmoney getPrice() {
         return price;
     }
 
-    public void setPrice(Money price){
+    public void setPrice(PGmoney price){
         this.price = price;
     }
 
