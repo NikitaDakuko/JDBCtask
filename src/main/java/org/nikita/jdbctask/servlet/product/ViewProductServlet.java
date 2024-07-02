@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.nikita.jdbctask.dao.ProductDAO;
 
 import java.io.IOException;
 
@@ -14,7 +15,8 @@ public class ViewProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            //ProductDAO
+            ProductDAO db = new ProductDAO();
+            db.findById(id);
 
         } finally {
 

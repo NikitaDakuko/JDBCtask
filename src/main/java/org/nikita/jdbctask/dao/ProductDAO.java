@@ -1,37 +1,76 @@
 package org.nikita.jdbctask.dao;
 
+import org.nikita.jdbctask.ApplicationConfig;
 import org.nikita.jdbctask.entity.Product;
-import org.nikita.jdbctask.interfaces.IProductDAO;
+import org.nikita.jdbctask.interfaces.DAO;
 
-import java.util.HashMap;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class ProductDAO implements IProductDAO {
-    private final Map<Long, Product> db = new HashMap<>();
+public class ProductDAO implements DAO<Product> {
+    private final Connection connection = ApplicationConfig.getConnection();
 
     @Override
     public void create(Product product){
-        db.put(product.getId(), product);
+        try {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO products VALUES (NULL, ?, ?, ?, ?)");
+            statement.setString(1, product.getName());
+            statement.setString(2, product.getPrice().toString());
+            statement.setString(3, String.valueOf(product.getQuantity()));
+            statement.setString(3, String.valueOf(product.getAvailability()));
+            int i = statement.executeUpdate();
+            if (i!=1) throw new SQLException();
+        }
+        catch (SQLException e) {
+            System.out.println("could not get products, SQLException: "+ e.getMessage());
+        }
     }
 
     @Override
     public List<Product> getAll(){
-        return db.values().stream().toList();
+        try {
+            Statement statement = connection.createStatement();
+            return parseResult(statement.executeQuery("SELECT * FROM products"));
+        }
+        catch (SQLException e) {
+            System.out.println("could not get products, SQLException: "+ e.getMessage());
+        }
+        return null;
     }
 
     @Override
     public Product findById(Long id){
-        return db.get(id);
+        try {
+            Statement statement = connection.createStatement();
+            return parseResult(statement.executeQuery("SELECT * FROM products WHERE id=" + id)).get(0);
+        }
+        catch (SQLException e) {
+            System.out.println("could not find product by id, SQLException: "+ e.getMessage());
+        }
+        return null;
     }
 
     @Override
     public void update(Product product){
-        db.put(product.getId(), product);
+//        db.put(product.getId(), product);
     }
 
     @Override
     public void delete(Product product){
-        db.remove(product.getId());
+//        db.remove(product.getId());
+    }
+
+    private List<Product> parseResult(ResultSet result) {
+        List<Product> products = new ArrayList<>();
+        try {
+            while (result.next()){
+                products.add(Product.fromResult(result));
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("SQLException: "+ e.getMessage());
+        }
+        return products;
     }
 }

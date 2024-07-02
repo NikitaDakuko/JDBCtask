@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import org.postgresql.util.PGmoney;
 
 import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 @Entity
 @Table(name = "products")
@@ -77,5 +79,13 @@ public class Product implements Serializable {
                 "available=" + available + ']';
     }
 
-
+    public static Product fromResult(ResultSet result) throws SQLException {
+        return new Product(
+                result.getLong("id"),
+                result.getString("name"),
+                result.getObject("price", PGmoney.class),
+                result.getInt("quantity"),
+                result.getBoolean("available")
+        );
+    }
 }
