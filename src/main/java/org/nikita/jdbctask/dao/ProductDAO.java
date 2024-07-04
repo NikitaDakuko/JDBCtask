@@ -70,10 +70,10 @@ public class ProductDAO implements DAO<Product> {
                     "UPDATE " + tableName +
                             " SET name = ?, price = "+product.getPrice().val + ", quantity = ?, available = ?" +
                             " WHERE id = ?");
-            statement.setLong(5, product.getId());
             statement.setString(1, product.getName());
-            statement.setLong(3, product.getQuantity());
-            statement.setBoolean(4, product.getAvailability());
+            statement.setLong(2, product.getQuantity());
+            statement.setBoolean(3, product.getAvailability());
+            statement.setLong(4, product.getId());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
