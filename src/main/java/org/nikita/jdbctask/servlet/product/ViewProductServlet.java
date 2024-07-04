@@ -22,11 +22,10 @@ public class ViewProductServlet extends HttpServlet {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
             productList.add(db.findById(id));
-        } catch (Exception e){
+        } catch (Exception e) {
             productList = db.getAll();
-        } finally {
-            resp.getOutputStream().println(productList.toString());
         }
+        resp.getOutputStream().println(productList.toString());
     }
 }
 

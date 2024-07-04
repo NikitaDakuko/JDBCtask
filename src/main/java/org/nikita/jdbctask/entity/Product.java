@@ -1,6 +1,5 @@
 package org.nikita.jdbctask.entity;
 
-import jakarta.persistence.*;
 import org.postgresql.util.PGmoney;
 
 import java.io.Serializable;
@@ -8,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Product implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
     private PGmoney price;
