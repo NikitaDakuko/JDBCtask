@@ -25,11 +25,13 @@ public class ProductDAO implements DAO<Product> {
     public void create(Product product){
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + tableName + "(name, price, quantity, available) VALUES (?, ?, ?, ?)");
+                    "INSERT INTO " + tableName +
+                            "(name, price, quantity, available) " +
+                            "VALUES (?, "+ product.getPrice().val + ", ?, ?)");
             statement.setString(1, product.getName());
-            statement.setString(2, product.getPrice().getValue());
-            statement.setLong(3, product.getQuantity());
-            statement.setBoolean(4, product.getAvailability());
+            statement.setLong(2, product.getQuantity());
+            statement.setBoolean(3, product.getAvailability());
+            System.out.println(statement.toString());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
