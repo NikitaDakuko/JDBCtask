@@ -3,7 +3,6 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.entity.Product;
 import org.nikita.jdbctask.interfaces.DAO;
-import org.postgresql.util.PGmoney;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -25,11 +24,12 @@ public class ProductDAO implements DAO<Product> {
     public void create(Product product){
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + tableName + "(name, price, quantity, available) VALUES (?, ?, ?, ?)");
+                    "INSERT INTO " + tableName +
+                            "(name, price, quantity, available) " +
+                            "VALUES (?, "+ product.getPrice().val + ", ?, ?)");
             statement.setString(1, product.getName());
-            statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
-            statement.setLong(3, product.getQuantity());
-            statement.setBoolean(4, product.getAvailability());
+            statement.setLong(2, product.getQuantity());
+            statement.setBoolean(3, product.getAvailability());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
@@ -68,12 +68,14 @@ public class ProductDAO implements DAO<Product> {
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE " + tableName +
-                            "SET name=?, price=?, quantity=?, available=?)" +
-                            " WHERE id=" + product.getId());
+                            " SET name = ?, price = "+product.getPrice().val + ", quantity = ?, available = ?" +
+                            " WHERE id = ?");
             statement.setString(1, product.getName());
-            statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
-            statement.setLong(3, product.getQuantity());
-            statement.setBoolean(4, product.getAvailability());
+            statement.setLong(2, product.getQuantity());
+            statement.setBoolean(3, product.getAvailability());
+            statement.setLong(4, product.getId());
+
+            if (statement.executeUpdate()!=1) throw new SQLException();
         }
         catch (SQLException e) {
             System.out.println("Could not update product with id = " + product.getId() + ", SQLException: "+ e.getMessage());
@@ -83,7 +85,9 @@ public class ProductDAO implements DAO<Product> {
     @Override
     public void delete(Long id){
         try {
-            connection.createStatement().executeQuery("DELETE FROM " + tableName + " WHERE id=" + id);
+            if(connection.createStatement().executeUpdate(
+                    "DELETE FROM " + tableName +
+                            " WHERE id=" + id) != 1) throw new SQLException();
         }
         catch (SQLException e) {
             System.out.println("Could not delete product with id = " + id + ", SQLException: "+ e.getMessage());
