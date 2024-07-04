@@ -1,5 +1,6 @@
 package org.nikita.jdbctask.dao;
 
+import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.entity.Product;
 import org.nikita.jdbctask.interfaces.DAO;
 
@@ -7,15 +8,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.nikita.jdbctask.DatabaseConfig.getConnection;
-
 public class ProductDAO implements DAO<Product> {
     private final String tableName = "public.products";
     private final Connection connection;
 
     public ProductDAO(){
         try {
-            this.connection = getConnection();
+            this.connection = DatabaseConfig.getConnection();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -25,9 +24,9 @@ public class ProductDAO implements DAO<Product> {
     public void create(Product product){
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + tableName + "(name, price, quantity, availability) VALUES (?, ?, ?, ?)");
+                    "INSERT INTO " + tableName + "(name, price, quantity, available) VALUES (?, ?, ?, ?)");
             statement.setString(1, product.getName());
-            statement.setString(2, product.getPrice().toString());
+            //statement.setString(2, product.getPrice().toString());
             statement.setString(3, String.valueOf(product.getQuantity()));
             statement.setString(3, String.valueOf(product.getAvailability()));
             int i = statement.executeUpdate();
@@ -72,7 +71,7 @@ public class ProductDAO implements DAO<Product> {
 //        db.remove(product.getId());
     }
 
-    private List<Product> parseResult(ResultSet result) {
+    public static List<Product> parseResult(ResultSet result) {
         List<Product> products = new ArrayList<>();
         try {
             while (result.next()){
