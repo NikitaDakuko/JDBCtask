@@ -31,7 +31,6 @@ public class ProductDAO implements DAO<Product> {
             statement.setString(1, product.getName());
             statement.setLong(2, product.getQuantity());
             statement.setBoolean(3, product.getAvailability());
-            System.out.println(statement.toString());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
@@ -76,6 +75,8 @@ public class ProductDAO implements DAO<Product> {
             statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
+
+            if (statement.executeUpdate()!=1) throw new SQLException();
         }
         catch (SQLException e) {
             System.out.println("Could not update product with id = " + product.getId() + ", SQLException: "+ e.getMessage());
@@ -85,7 +86,9 @@ public class ProductDAO implements DAO<Product> {
     @Override
     public void delete(Long id){
         try {
-            connection.createStatement().executeQuery("DELETE FROM " + tableName + " WHERE id=" + id);
+            if(connection.createStatement().executeUpdate(
+                    "DELETE FROM " + tableName +
+                            " WHERE id=" + id) != 1) throw new SQLException();
         }
         catch (SQLException e) {
             System.out.println("Could not delete product with id = " + id + ", SQLException: "+ e.getMessage());
