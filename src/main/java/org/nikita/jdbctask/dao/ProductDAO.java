@@ -69,14 +69,13 @@ public class ProductDAO implements DAO<Product> {
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE " + tableName +
-                            "SET name=?, price=?, quantity=?, available=?)" +
-                            " WHERE id=" + product.getId());
+                            "SET name = ?, price = ?, quantity = ?, available = ?)" +
+                            " WHERE id = ?");
+            statement.setLong(5, product.getId());
             statement.setString(1, product.getName());
             statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
-
-            System.out.println(statement);
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
