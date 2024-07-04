@@ -1,5 +1,7 @@
 package org.nikita.jdbctask;
 
+import org.postgresql.Driver;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -25,6 +27,7 @@ public class DatabaseConfig {
     }
 
     public static Connection getConnection() throws SQLException {
+        DriverManager.registerDriver(new Driver());
         return DriverManager.getConnection(getDbUrl(), getDbUsername(), getDbPassword());
     }
 
