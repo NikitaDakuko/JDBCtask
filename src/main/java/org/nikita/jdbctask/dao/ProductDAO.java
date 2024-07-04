@@ -76,6 +76,8 @@ public class ProductDAO implements DAO<Product> {
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
 
+            System.out.println(statement);
+
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
         catch (SQLException e) {
