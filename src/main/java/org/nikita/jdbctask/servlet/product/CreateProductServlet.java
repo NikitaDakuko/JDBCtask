@@ -5,6 +5,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.entity.Product;
 import org.postgresql.util.PGmoney;
 
@@ -26,7 +27,8 @@ public class CreateProductServlet extends HttpServlet {
                 Integer.parseInt(req.getParameter("productQuantity")),
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
-        //ProductDAO.create(p);
+        ProductDAO productDAO = new ProductDAO();
+        productDAO.create(p);
         resp.getOutputStream().println(p.toString());
     }
 }
