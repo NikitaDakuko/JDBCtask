@@ -9,18 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO implements DAO<Product> {
-    private final String tableName = "public.\"Product\"";
+    private final String tableName = "public.products";
     private final Connection connection = ApplicationConfig.getConnection();
 
-
-//    INSERT INTO public."Product" ("Name", "Price", "Quantity", "Available")
-//    VALUES ('{lmao}', 420, 4, 'FALSE')
     @Override
     public void create(Product product){
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + tableName + "(\"Name\", \"Price\", \"Quantity\", \"Available\")" + "  VALUES (?, ?, ?, ?)");
-            statement.setString(1, "{" + product.getName() + "}");
+                    "INSERT INTO " + tableName + "(name, price, quantity, availability) VALUES (?, ?, ?, ?)");
+            statement.setString(1, product.getName());
             statement.setString(2, product.getPrice().toString());
             statement.setString(3, String.valueOf(product.getQuantity()));
             statement.setString(3, String.valueOf(product.getAvailability()));
