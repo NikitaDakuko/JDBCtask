@@ -58,19 +58,36 @@ public class ProductDAO implements DAO<Product> {
                     "SELECT * FROM " + tableName + " WHERE id=" + id)).get(0);
         }
         catch (SQLException e) {
-            System.out.println("Could not find product by id, SQLException: "+ e.getMessage());
+            System.out.println("Could not find product with id = " + id + ", SQLException: "+ e.getMessage());
         }
         return null;
     }
 
     @Override
     public void update(Product product){
-//        db.put(product.getId(), product);
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE " + tableName +
+                            "SET name=?, price=?, quantity=?, available=?)" +
+                            " WHERE id=" + product.getId());
+            statement.setString(1, product.getName());
+            statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
+            statement.setLong(3, product.getQuantity());
+            statement.setBoolean(4, product.getAvailability());
+        }
+        catch (SQLException e) {
+            System.out.println("Could not update product with id = " + product.getId() + ", SQLException: "+ e.getMessage());
+        }
     }
 
     @Override
-    public void delete(Product product){
-//        db.remove(product.getId());
+    public void delete(Long id){
+        try {
+            connection.createStatement().executeQuery("DELETE FROM " + tableName + " WHERE id=" + id);
+        }
+        catch (SQLException e) {
+            System.out.println("Could not delete product with id = " + id + ", SQLException: "+ e.getMessage());
+        }
     }
 
     private List<Product> parseResult(ResultSet result) {
