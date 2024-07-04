@@ -10,7 +10,11 @@ import java.util.List;
 
 public class ProductDAO implements DAO<Product> {
     private final String tableName = "public.products";
-    private final Connection connection = DatabaseConfig.getConnection();
+    private final Connection connection;
+
+    public ProductDAO(){
+        this.connection = DatabaseConfig.getConnection();
+    }
 
     @Override
     public void create(Product product){
