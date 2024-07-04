@@ -75,8 +75,7 @@ public class Product implements Serializable {
         return new Product(
                 result.getLong("id"),
                 result.getString("name"),
-                new PGmoney(Double.parseDouble(
-                        result.getString("price").substring(3))),
+                new PGmoney(result.getString("price").substring(3)),
                 result.getInt("quantity"),
                 result.getBoolean("available")
         );
