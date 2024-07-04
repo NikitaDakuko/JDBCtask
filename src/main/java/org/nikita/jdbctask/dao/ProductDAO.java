@@ -26,14 +26,14 @@ public class ProductDAO implements DAO<Product> {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName + "(name, price, quantity, available) VALUES (?, ?, ?, ?)");
             statement.setString(1, product.getName());
-            //statement.setString(2, product.getPrice().toString());
-            statement.setString(3, String.valueOf(product.getQuantity()));
-            statement.setString(3, String.valueOf(product.getAvailability()));
-            int i = statement.executeUpdate();
-            if (i!=1) throw new SQLException();
+            statement.setInt(2, ((int) product.getPrice().val));
+            statement.setLong(3, product.getQuantity());
+            statement.setBoolean(4, product.getAvailability());
+
+            if (statement.executeUpdate()!=1) throw new SQLException();
         }
         catch (SQLException e) {
-            System.out.println("could not get products, SQLException: "+ e.getMessage());
+            System.out.println("Could not create product, SQLException: "+ e.getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class ProductDAO implements DAO<Product> {
                     "SELECT * FROM " + tableName).executeQuery());
         }
         catch (SQLException e) {
-            System.out.println("could not get products, SQLException: "+ e.getMessage());
+            System.out.println("Could not get products, SQLException: "+ e.getMessage());
         }
         return null;
     }
@@ -53,10 +53,11 @@ public class ProductDAO implements DAO<Product> {
     public Product findById(Long id){
         try {
             Statement statement = connection.createStatement();
-            return parseResult(statement.executeQuery("SELECT * FROM " + tableName + " WHERE id=" + id)).get(0);
+            return parseResult(statement.executeQuery(
+                    "SELECT * FROM " + tableName + " WHERE id=" + id)).get(0);
         }
         catch (SQLException e) {
-            System.out.println("could not find product by id, SQLException: "+ e.getMessage());
+            System.out.println("Could not find product by id, SQLException: "+ e.getMessage());
         }
         return null;
     }
@@ -71,7 +72,7 @@ public class ProductDAO implements DAO<Product> {
 //        db.remove(product.getId());
     }
 
-    public static List<Product> parseResult(ResultSet result) {
+    private List<Product> parseResult(ResultSet result) {
         List<Product> products = new ArrayList<>();
         try {
             while (result.next()){

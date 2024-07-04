@@ -9,6 +9,7 @@ import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.entity.Product;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/products")
@@ -16,8 +17,16 @@ public class ViewProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDAO db = new ProductDAO();
-        List<Product> productList = db.getAll();
-        resp.getOutputStream().println(productList.toString());
+        List<Product> productList = new ArrayList<>();
+
+        try {
+            Long id = Long.parseLong(req.getParameter("id"));
+            productList.add(db.findById(id));
+        } catch (Exception e){
+            productList = db.getAll();
+        } finally {
+            resp.getOutputStream().println(productList.toString());
+        }
     }
 }
 
