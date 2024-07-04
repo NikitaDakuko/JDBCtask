@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.entity.Product;
+import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
 
@@ -25,7 +26,7 @@ public class EditProductServlet extends HttpServlet {
         Product p = new Product(
                 this.id,
                 req.getParameter("productName"),
-                //new PGmoney(Integer.parseInt(req.getParameter("productPrice"))),
+                new PGmoney(Integer.parseInt(req.getParameter("productPrice"))),
                 Integer.parseInt(req.getParameter("productQuantity")),
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
