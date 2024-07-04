@@ -24,13 +24,8 @@ public class DatabaseConfig {
         }
     }
 
-    public static Connection getConnection() {
-        try {
-            return DriverManager.getConnection(getDbUrl(), getDbUsername(), getDbPassword());
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            return null;
-        }
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(getDbUrl(), getDbUsername(), getDbPassword());
     }
 
     private static String getDbUrl() {

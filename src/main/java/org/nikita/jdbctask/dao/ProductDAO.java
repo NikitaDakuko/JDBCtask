@@ -1,6 +1,5 @@
 package org.nikita.jdbctask.dao;
 
-import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.entity.Product;
 import org.nikita.jdbctask.interfaces.DAO;
 
@@ -8,12 +7,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.nikita.jdbctask.DatabaseConfig.getConnection;
+
 public class ProductDAO implements DAO<Product> {
     private final String tableName = "public.products";
     private final Connection connection;
 
     public ProductDAO(){
-        this.connection = DatabaseConfig.getConnection();
+        try {
+            this.connection = getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
