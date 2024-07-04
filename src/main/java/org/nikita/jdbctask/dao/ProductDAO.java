@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDAO implements DAO<Product> {
-    private final String tableName = "public.products";
+    private final String tableName = "public.product";
     private final Connection connection;
 
     public ProductDAO(){
@@ -40,8 +40,8 @@ public class ProductDAO implements DAO<Product> {
     @Override
     public List<Product> getAll(){
         try {
-            Statement statement = connection.createStatement();
-            return parseResult(statement.executeQuery("SELECT * FROM "+ tableName));
+            return parseResult(connection.prepareStatement(
+                    "SELECT * FROM " + tableName).executeQuery());
         }
         catch (SQLException e) {
             System.out.println("could not get products, SQLException: "+ e.getMessage());
