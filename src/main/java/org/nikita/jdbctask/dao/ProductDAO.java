@@ -3,7 +3,6 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.entity.Product;
 import org.nikita.jdbctask.interfaces.DAO;
-import org.postgresql.util.PGmoney;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -69,11 +68,10 @@ public class ProductDAO implements DAO<Product> {
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE " + tableName +
-                            "SET name = ?, price = ?, quantity = ?, available = ?" +
+                            " SET name = ?, price = "+product.getPrice().val + ", quantity = ?, available = ?" +
                             " WHERE id = ?");
             statement.setLong(5, product.getId());
             statement.setString(1, product.getName());
-            statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
 
