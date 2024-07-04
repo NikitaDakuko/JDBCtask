@@ -14,9 +14,9 @@ public class ViewProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            Long id = Long.parseLong(req.getParameter("id"));
+            //Long id = Long.parseLong(req.getParameter("id"));
             ProductDAO db = new ProductDAO();
-            db.findById(id);
+            resp.getOutputStream().println(db.getAll().toString());
 
         } finally {
 
