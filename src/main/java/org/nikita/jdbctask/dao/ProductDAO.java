@@ -27,7 +27,7 @@ public class ProductDAO implements DAO<Product> {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName + "(name, price, quantity, available) VALUES (?, ?, ?, ?)");
             statement.setString(1, product.getName());
-            statement.setObject(2, product.getPrice(), PGmoney.class.getModifiers());
+            statement.setObject(2, product.getPrice());
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
 
