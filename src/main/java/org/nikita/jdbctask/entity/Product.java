@@ -77,7 +77,7 @@ public class Product implements Serializable {
                 result.getString("name"),
                 new PGmoney(result
                         .getString("price")
-                        .substring(3)
+                        .substring(2)
                         .replace(",", "")),
                 result.getInt("quantity"),
                 result.getBoolean("available")
