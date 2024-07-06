@@ -3,15 +3,11 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
-import org.nikita.jdbctask.mapper.ProductMapper;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductDAO implements DAO<ProductDTO> {
     private final String tableName = "public.product";
-    private final ProductMapper mapper = new ProductMapper();
     private final Connection connection;
 
     public ProductDAO(){
@@ -41,10 +37,10 @@ public class ProductDAO implements DAO<ProductDTO> {
     }
 
     @Override
-    public List<ProductDTO> getAll(){
+    public ResultSet getAll(){
         try {
-            return parseResult(connection.prepareStatement(
-                    "SELECT * FROM " + tableName).executeQuery());
+            return connection.prepareStatement(
+                    "SELECT * FROM " + tableName).executeQuery();
         }
         catch (SQLException e) {
             System.out.println("Could not get products, SQLException: "+ e.getMessage());
@@ -53,11 +49,10 @@ public class ProductDAO implements DAO<ProductDTO> {
     }
 
     @Override
-    public ProductDTO findById(Long id){
+    public ResultSet findById(Long id){
         try {
-            Statement statement = connection.createStatement();
-            return parseResult(statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id=" + id)).get(0);
+            return connection.createStatement().executeQuery(
+                    "SELECT * FROM " + tableName + " WHERE id=" + id);
         }
         catch (SQLException e) {
             System.out.println("Could not find product with id = " + id + ", SQLException: "+ e.getMessage());
@@ -94,18 +89,5 @@ public class ProductDAO implements DAO<ProductDTO> {
         catch (SQLException e) {
             System.out.println("Could not delete product with id = " + id + ", SQLException: "+ e.getMessage());
         }
-    }
-
-    private List<ProductDTO> parseResult(ResultSet result) {
-        List<ProductDTO> products = new ArrayList<>();
-        try {
-            while (result.next()){
-                products.add(mapper.fromResult(result));
-            }
-        }
-        catch (SQLException e) {
-            System.out.println("SQLException: "+ e.getMessage());
-        }
-        return products;
     }
 }

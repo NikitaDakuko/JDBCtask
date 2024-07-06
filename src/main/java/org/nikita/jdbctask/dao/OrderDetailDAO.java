@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     private final String tableName = "public.orderApproval";
@@ -44,7 +42,7 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     }
 
     @Override
-    public List<OrderDetailDTO> getAll(){
+    public ResultSet getAll(){
 //        try {
 //            return parseResult(connection.prepareStatement(
 //                    "SELECT * FROM " + tableName).executeQuery());
@@ -56,11 +54,11 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     }
 
     @Override
-    public OrderDetailDTO findById(Long id){
+    public ResultSet findById(Long id){
         try {
             Statement statement = connection.createStatement();
-            return parseResult(statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id=" + id)).get(0);
+            return statement.executeQuery(
+                    "SELECT * FROM " + tableName + " WHERE id=" + id);
         }
         catch (SQLException e) {
             System.out.println("Could not find orderDetail with id = " + id + ", SQLException: "+ e.getMessage());
@@ -97,18 +95,5 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         catch (SQLException e) {
             System.out.println("Could not delete orderDetail with id = " + id + ", SQLException: "+ e.getMessage());
         }
-    }
-
-    private List<OrderDetailDTO> parseResult(ResultSet result) {
-        List<OrderDetailDTO> orderDetailList = new ArrayList<>();
-        try {
-            while (result.next()){
-                orderDetailList.add(mapper.fromResult(result));
-            }
-        }
-        catch (SQLException e) {
-            System.out.println("SQLException: "+ e.getMessage());
-        }
-        return orderDetailList;
     }
 }
