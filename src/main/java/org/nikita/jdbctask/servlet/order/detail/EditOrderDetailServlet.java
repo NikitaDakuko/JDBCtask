@@ -24,15 +24,15 @@ public class EditOrderDetailServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Product p = new Product(
-                this.id,
-                req.getParameter("productName"),
-                new PGmoney(Integer.parseInt(req.getParameter("productPrice"))),
-                Integer.parseInt(req.getParameter("productQuantity")),
-                Boolean.parseBoolean(req.getParameter("productAvailability")));
-
-        ProductDAO dao = new ProductDAO();
-        dao.update(p);
-        resp.getOutputStream().println(p.toString());
+//        Product p = new Product(
+//                this.id,
+//                req.getParameter("productName"),
+//                new PGmoney(Integer.parseInt(req.getParameter("productPrice"))),
+//                Integer.parseInt(req.getParameter("productQuantity")),
+//                Boolean.parseBoolean(req.getParameter("productAvailability")));
+//
+//        ProductDAO dao = new ProductDAO();
+//        dao.update(p);
+//        resp.getOutputStream().println(p.toString());
     }
 }

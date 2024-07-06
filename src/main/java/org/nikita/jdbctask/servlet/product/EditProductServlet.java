@@ -6,7 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.ProductDAO;
-import org.nikita.jdbctask.entity.Product;
+import org.nikita.jdbctask.dto.ProductDTO;
+import org.nikita.jdbctask.mapper.ProductMapper;
 import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class EditProductServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Product p = new Product(
+        ProductDTO p = new ProductDTO(
                 this.id,
                 req.getParameter("productName"),
                 new PGmoney(Integer.parseInt(req.getParameter("productPrice"))),
@@ -33,6 +34,7 @@ public class EditProductServlet extends HttpServlet {
 
         ProductDAO dao = new ProductDAO();
         dao.update(p);
-        resp.getOutputStream().println(p.toString());
+        ProductMapper mapper = new ProductMapper();
+        resp.getOutputStream().println(mapper.fromDTO(p).toString());
     }
 }
