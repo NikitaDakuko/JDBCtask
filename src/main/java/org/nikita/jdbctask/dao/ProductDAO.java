@@ -1,15 +1,17 @@
 package org.nikita.jdbctask.dao;
 
 import org.nikita.jdbctask.DatabaseConfig;
-import org.nikita.jdbctask.entity.Product;
+import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.ProductMapper;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDAO implements DAO<Product> {
+public class ProductDAO implements DAO<ProductDTO> {
     private final String tableName = "public.product";
+    private final ProductMapper mapper = new ProductMapper();
     private final Connection connection;
 
     public ProductDAO(){
@@ -21,7 +23,7 @@ public class ProductDAO implements DAO<Product> {
     }
 
     @Override
-    public void create(Product product){
+    public void create(ProductDTO product){
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName +
@@ -39,7 +41,7 @@ public class ProductDAO implements DAO<Product> {
     }
 
     @Override
-    public List<Product> getAll(){
+    public List<ProductDTO> getAll(){
         try {
             return parseResult(connection.prepareStatement(
                     "SELECT * FROM " + tableName).executeQuery());
@@ -51,7 +53,7 @@ public class ProductDAO implements DAO<Product> {
     }
 
     @Override
-    public Product findById(Long id){
+    public ProductDTO findById(Long id){
         try {
             Statement statement = connection.createStatement();
             return parseResult(statement.executeQuery(
@@ -64,7 +66,7 @@ public class ProductDAO implements DAO<Product> {
     }
 
     @Override
-    public void update(Product product){
+    public void update(ProductDTO product){
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE " + tableName +
@@ -94,11 +96,11 @@ public class ProductDAO implements DAO<Product> {
         }
     }
 
-    private List<Product> parseResult(ResultSet result) {
-        List<Product> products = new ArrayList<>();
+    private List<ProductDTO> parseResult(ResultSet result) {
+        List<ProductDTO> products = new ArrayList<>();
         try {
             while (result.next()){
-                products.add(Product.fromResult(result));
+                products.add(mapper.fromResult(result));
             }
         }
         catch (SQLException e) {

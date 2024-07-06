@@ -3,8 +3,6 @@ package org.nikita.jdbctask.entity;
 import org.postgresql.util.PGmoney;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class Product implements Serializable {
     private Long id;
@@ -23,6 +21,16 @@ public class Product implements Serializable {
         this.price = price;
         this.quantity = quantity;
         this.available = available;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                " id=" + id +
+                ", name=" + name +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", available=" + available + "} ";
     }
 
     public long getId() {
@@ -59,28 +67,5 @@ public class Product implements Serializable {
 
     public void setAvailability(boolean available){
         this.available = available;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                " id=" + id +
-                ", name=" + name +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", available=" + available + "} ";
-    }
-
-    public static Product fromResult(ResultSet result) throws SQLException {
-        return new Product(
-                result.getLong("id"),
-                result.getString("name"),
-                new PGmoney(result
-                        .getString("price")
-                        .substring(2)
-                        .replace(",", "")),
-                result.getInt("quantity"),
-                result.getBoolean("available")
-        );
     }
 }

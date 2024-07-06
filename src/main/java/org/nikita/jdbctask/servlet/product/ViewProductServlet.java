@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.ProductDAO;
-import org.nikita.jdbctask.entity.Product;
+import org.nikita.jdbctask.dto.ProductDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class ViewProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDAO db = new ProductDAO();
-        List<Product> productList = new ArrayList<>();
+        List<ProductDTO> productList = new ArrayList<>();
 
         try {
             Long id = Long.parseLong(req.getParameter("id"));
