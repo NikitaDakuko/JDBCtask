@@ -1,14 +1,14 @@
 package org.nikita.jdbctask.interfaces;
 
-import java.util.List;
+import java.sql.ResultSet;
 
 public interface DAO<T> {
 
     void create(T item);
 
-    T findById(Long id);
+    ResultSet findById(Long id);
 
-    List<T> getAll();
+    ResultSet getAll();
 
     void update(T newItem);
 

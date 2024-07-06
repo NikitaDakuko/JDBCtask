@@ -2,11 +2,26 @@ package org.nikita.jdbctask.interfaces;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public interface Mapper<T, DTO> {
-    public T fromDTO(DTO dto);
+    T fromDTO(DTO dto);
 
-    public DTO toDTO(T t);
+    DTO toDTO(T t);
 
-    public DTO fromResult(ResultSet resultSet) throws SQLException;
+    DTO fromResult(ResultSet resultSet);
+
+    default List<DTO> listFromResult(ResultSet resultSet){
+        List<DTO> dtos = new ArrayList<>();
+        try {
+            while (resultSet.next()){
+                dtos.add(fromResult(resultSet));
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("SQLException: "+ e.getMessage());
+        }
+        return dtos;
+    }
 }

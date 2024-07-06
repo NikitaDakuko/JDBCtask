@@ -34,17 +34,23 @@ public class ProductMapper implements Mapper<Product, ProductDTO> {
     }
 
     @Override
-    public ProductDTO fromResult(ResultSet result) throws SQLException {
-        return new ProductDTO(
-                result.getLong("id"),
-                result.getString("name"),
-                new PGmoney(result
-                        .getString("price")
-                        .substring(2)
-                        .replace(",", "")),
-                result.getInt("quantity"),
-                result.getBoolean("available")
-        );
+    public ProductDTO fromResult(ResultSet result){
+        try {
+            return new ProductDTO(
+                    result.getLong("id"),
+                    result.getString("name"),
+                    new PGmoney(result
+                            .getString("price")
+                            .substring(2)
+                            .replace(",", "")),
+                    result.getInt("quantity"),
+                    result.getBoolean("available")
+            );
+        }
+        catch (SQLException e) {
+            System.out.println("SQLException: "+ e.getMessage());
+        }
+        return null;
     }
 
     public List<ProductDTO> toDTO(List<Product> products){

@@ -37,15 +37,21 @@ public class OrderDetailMapper implements Mapper<OrderDetail, OrderDetailDTO> {
     }
 
     @Override
-    public OrderDetailDTO fromResult(ResultSet resultSet) throws SQLException {
-        return new OrderDetailDTO(
-                resultSet.getLong("id"),
-                OrderStatus.valueOf(resultSet.getString("oderStatus")),
-                (List<ProductDTO>) resultSet.getArray("products"),
-                new PGmoney(resultSet
-                        .getString("totalAmount")
-                        .substring(2)
-                        .replace(",", ""))
-        );
+    public OrderDetailDTO fromResult(ResultSet resultSet){
+        try {
+            return new OrderDetailDTO(
+                    resultSet.getLong("id"),
+                    OrderStatus.valueOf(resultSet.getString("oderStatus")),
+                    (List<ProductDTO>) resultSet.getArray("products"),
+                    new PGmoney(resultSet
+                            .getString("totalAmount")
+                            .substring(2)
+                            .replace(",", ""))
+            );
+        }
+        catch (SQLException e) {
+            System.out.println("SQLException: "+ e.getMessage());
+        }
+        return null;
     }
 }
