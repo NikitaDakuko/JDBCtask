@@ -1,8 +1,9 @@
 package org.nikita.jdbctask.dao;
 
 import org.nikita.jdbctask.DatabaseConfig;
-import org.nikita.jdbctask.entity.OrderApproval;
+import org.nikita.jdbctask.dto.OrderApprovalDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.OrderApprovalMapper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,8 +12,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderApprovalDAO implements DAO<OrderApproval> {
+public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     private final String tableName = "public.orderApproval";
+    private final OrderApprovalMapper mapper = new OrderApprovalMapper();
     private final Connection connection;
 
     public OrderApprovalDAO(){
@@ -24,7 +26,7 @@ public class OrderApprovalDAO implements DAO<OrderApproval> {
     }
 
     @Override
-    public void create(OrderApproval orderApproval){
+    public void create(OrderApprovalDTO orderApproval){
 //        try {
 //            PreparedStatement statement = connection.prepareStatement(
 //                    "INSERT INTO " + tableName +
@@ -42,7 +44,7 @@ public class OrderApprovalDAO implements DAO<OrderApproval> {
     }
 
     @Override
-    public List<OrderApproval> getAll(){
+    public List<OrderApprovalDTO> getAll(){
 //        try {
 //            return parseResult(connection.prepareStatement(
 //                    "SELECT * FROM " + tableName).executeQuery());
@@ -54,7 +56,7 @@ public class OrderApprovalDAO implements DAO<OrderApproval> {
     }
 
     @Override
-    public OrderApproval findById(Long id){
+    public OrderApprovalDTO findById(Long id){
         try {
             Statement statement = connection.createStatement();
             return parseResult(statement.executeQuery(
@@ -67,7 +69,7 @@ public class OrderApprovalDAO implements DAO<OrderApproval> {
     }
 
     @Override
-    public void update(OrderApproval orderApproval){
+    public void update(OrderApprovalDTO orderApproval){
 //        try {
 //            PreparedStatement statement = connection.prepareStatement(
 //                    "UPDATE " + tableName +
@@ -97,11 +99,11 @@ public class OrderApprovalDAO implements DAO<OrderApproval> {
         }
     }
 
-    private List<OrderApproval> parseResult(ResultSet result) {
-        List<OrderApproval> orderApprovalList = new ArrayList<>();
+    private List<OrderApprovalDTO> parseResult(ResultSet result) {
+        List<OrderApprovalDTO> orderApprovalList = new ArrayList<>();
         try {
             while (result.next()){
-                orderApprovalList.add(OrderApproval.fromResult(result));
+                orderApprovalList.add(mapper.fromResult(result));
             }
         }
         catch (SQLException e) {

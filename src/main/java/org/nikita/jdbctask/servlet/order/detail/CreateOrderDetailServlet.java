@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderDetailDAO;
-import org.nikita.jdbctask.entity.OrderDetail;
+import org.nikita.jdbctask.dto.OrderDetailDTO;
 
 import java.io.IOException;
 
@@ -20,7 +20,7 @@ public class CreateOrderDetailServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        OrderDetail orderDetail = new OrderDetail(null, null, null);
+        OrderDetailDTO orderDetail = new OrderDetailDTO(null, null, null);
 
         OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
         orderDetailDAO.create(orderDetail);

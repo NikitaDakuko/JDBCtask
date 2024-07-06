@@ -1,8 +1,9 @@
 package org.nikita.jdbctask.dao;
 
 import org.nikita.jdbctask.DatabaseConfig;
-import org.nikita.jdbctask.entity.OrderDetail;
+import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.OrderDetailMapper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -11,8 +12,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailDAO implements DAO<OrderDetail> {
+public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     private final String tableName = "public.orderApproval";
+    private final OrderDetailMapper mapper = new OrderDetailMapper();
     private final Connection connection;
 
     public OrderDetailDAO(){
@@ -24,7 +26,7 @@ public class OrderDetailDAO implements DAO<OrderDetail> {
     }
 
     @Override
-    public void create(OrderDetail orderDetail){
+    public void create(OrderDetailDTO orderDetail){
 //        try {
 //            PreparedStatement statement = connection.prepareStatement(
 //                    "INSERT INTO " + tableName +
@@ -42,7 +44,7 @@ public class OrderDetailDAO implements DAO<OrderDetail> {
     }
 
     @Override
-    public List<OrderDetail> getAll(){
+    public List<OrderDetailDTO> getAll(){
 //        try {
 //            return parseResult(connection.prepareStatement(
 //                    "SELECT * FROM " + tableName).executeQuery());
@@ -54,7 +56,7 @@ public class OrderDetailDAO implements DAO<OrderDetail> {
     }
 
     @Override
-    public OrderDetail findById(Long id){
+    public OrderDetailDTO findById(Long id){
         try {
             Statement statement = connection.createStatement();
             return parseResult(statement.executeQuery(
@@ -67,7 +69,7 @@ public class OrderDetailDAO implements DAO<OrderDetail> {
     }
 
     @Override
-    public void update(OrderDetail orderDetail){
+    public void update(OrderDetailDTO orderDetail){
 //        try {
 //            PreparedStatement statement = connection.prepareStatement(
 //                    "UPDATE " + tableName +
@@ -97,11 +99,11 @@ public class OrderDetailDAO implements DAO<OrderDetail> {
         }
     }
 
-    private List<OrderDetail> parseResult(ResultSet result) {
-        List<OrderDetail> orderDetailList = new ArrayList<>();
+    private List<OrderDetailDTO> parseResult(ResultSet result) {
+        List<OrderDetailDTO> orderDetailList = new ArrayList<>();
         try {
             while (result.next()){
-                orderDetailList.add(OrderDetail.fromResult(result));
+                orderDetailList.add(mapper.fromResult(result));
             }
         }
         catch (SQLException e) {

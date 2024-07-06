@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderDetailDAO;
+import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.entity.OrderDetail;
 
 import java.io.IOException;
@@ -17,7 +18,7 @@ public class ViewOrderDetailServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
-        List<OrderDetail> orderDetails = new ArrayList<>();
+        List<OrderDetailDTO> orderDetails = new ArrayList<>();
 
         try {
             Long id = Long.parseLong(req.getParameter("id"));
