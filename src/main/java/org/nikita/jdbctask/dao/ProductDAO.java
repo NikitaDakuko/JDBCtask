@@ -1,22 +1,16 @@
 package org.nikita.jdbctask.dao;
 
-import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ProductDAO implements DAO<ProductDTO> {
     private final String tableName = "public.product";
-    private final Connection connection;
-
-    public ProductDAO(){
-        try {
-            this.connection = DatabaseConfig.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private final Connection connection = getConnection();
 
     @Override
     public void create(ProductDTO product){
@@ -37,27 +31,13 @@ public class ProductDAO implements DAO<ProductDTO> {
     }
 
     @Override
-    public ResultSet getAll(){
-        try {
-            return connection.prepareStatement(
-                    "SELECT * FROM " + tableName).executeQuery();
-        }
-        catch (SQLException e) {
-            System.out.println("Could not get products, SQLException: "+ e.getMessage());
-        }
-        return null;
+    public ResultSet findById(Long id) {
+        return defaultFindById(connection, tableName, id);
     }
 
     @Override
-    public ResultSet findById(Long id){
-        try {
-            return connection.createStatement().executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id=" + id);
-        }
-        catch (SQLException e) {
-            System.out.println("Could not find product with id = " + id + ", SQLException: "+ e.getMessage());
-        }
-        return null;
+    public ResultSet getAll() {
+        return defaultGetAll(connection, tableName);
     }
 
     @Override
@@ -81,13 +61,6 @@ public class ProductDAO implements DAO<ProductDTO> {
 
     @Override
     public void delete(Long id){
-        try {
-            if(connection.createStatement().executeUpdate(
-                    "DELETE FROM " + tableName +
-                            " WHERE id=" + id) != 1) throw new SQLException();
-        }
-        catch (SQLException e) {
-            System.out.println("Could not delete product with id = " + id + ", SQLException: "+ e.getMessage());
-        }
+        defaultDelete(connection, tableName, id);
     }
 }

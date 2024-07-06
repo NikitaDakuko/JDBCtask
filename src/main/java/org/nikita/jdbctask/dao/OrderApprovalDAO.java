@@ -1,27 +1,14 @@
 package org.nikita.jdbctask.dao;
 
-import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderApprovalDTO;
 import org.nikita.jdbctask.interfaces.DAO;
-import org.nikita.jdbctask.mapper.OrderApprovalMapper;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     private final String tableName = "public.orderApproval";
-    private final OrderApprovalMapper mapper = new OrderApprovalMapper();
-    private final Connection connection;
-
-    public OrderApprovalDAO(){
-        try {
-            this.connection = DatabaseConfig.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private final Connection connection = getConnection();
 
     @Override
     public void create(OrderApprovalDTO orderApproval){
@@ -42,28 +29,13 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     }
 
     @Override
-    public ResultSet getAll(){
-//        try {
-//            return parseResult(connection.prepareStatement(
-//                    "SELECT * FROM " + tableName).executeQuery());
-//        }
-//        catch (SQLException e) {
-//            System.out.println("Could not get orderApprovals, SQLException: "+ e.getMessage());
-//        }
-        return null;
+    public ResultSet findById(Long id) {
+        return defaultFindById(connection, tableName, id);
     }
 
     @Override
-    public ResultSet findById(Long id){
-        try {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id=" + id);
-        }
-        catch (SQLException e) {
-            System.out.println("Could not find orderApproval with id = " + id + ", SQLException: "+ e.getMessage());
-        }
-        return null;
+    public ResultSet getAll() {
+        return defaultGetAll(connection, tableName);
     }
 
     @Override
@@ -87,13 +59,6 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public void delete(Long id){
-        try {
-            if(connection.createStatement().executeUpdate(
-                    "DELETE FROM " + tableName +
-                            " WHERE id=" + id) != 1) throw new SQLException();
-        }
-        catch (SQLException e) {
-            System.out.println("Could not delete orderApproval with id = " + id + ", SQLException: "+ e.getMessage());
-        }
+        defaultDelete(connection, tableName, id);
     }
 }
