@@ -1,11 +1,11 @@
 package org.nikita.jdbctask.entity;
 
+import org.nikita.jdbctask.enums.OrderStatus;
 import org.postgresql.util.PGmoney;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class OrderDetail implements Serializable {
+public class OrderDetail {
     private long id;
     private OrderStatus orderStatus;
     private List<Product> products;
@@ -20,19 +20,6 @@ public class OrderDetail implements Serializable {
     public OrderDetail(Long id, OrderStatus orderStatus, List<Product> products, PGmoney totalAmount){
         this(orderStatus, products, totalAmount);
         this.id = id;
-    }
-
-    public String toString(){
-        StringBuilder productString = new StringBuilder();
-        for (Product product : products) {
-            productString.append(product.toString()).append(" ");
-        }
-
-        return "OrderDetail:{"+
-                " id: " + id +
-                ", orderStatus: " + orderStatus +
-                ", products: " + productString +
-                ", totalAmount: " + totalAmount.toString();
     }
 
     public long getId() {

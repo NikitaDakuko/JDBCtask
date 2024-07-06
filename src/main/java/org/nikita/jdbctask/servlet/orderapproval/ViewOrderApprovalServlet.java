@@ -1,4 +1,4 @@
-package org.nikita.jdbctask.servlet.order.approval;
+package org.nikita.jdbctask.servlet.orderapproval;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderApprovalDAO;
 import org.nikita.jdbctask.dto.OrderDetailDTO;
-import org.nikita.jdbctask.mapper.OrderDetailMapper;
+import org.nikita.jdbctask.mapper.dto.OrderDetailDTOMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class ViewOrderApprovalServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderApprovalDAO db = new OrderApprovalDAO();
-        OrderDetailMapper mapper = new OrderDetailMapper();
+        OrderDetailDTOMapper mapper = new OrderDetailDTOMapper();
         List<OrderDetailDTO> orderApprovals = new ArrayList<>();
 
         try {

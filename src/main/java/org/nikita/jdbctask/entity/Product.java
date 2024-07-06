@@ -2,9 +2,7 @@ package org.nikita.jdbctask.entity;
 
 import org.postgresql.util.PGmoney;
 
-import java.io.Serializable;
-
-public class Product implements Serializable {
+public class Product{
     private Long id;
     private String name;
     private PGmoney price;
@@ -21,16 +19,6 @@ public class Product implements Serializable {
         this.price = price;
         this.quantity = quantity;
         this.available = available;
-    }
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                " id=" + id +
-                ", name=" + name +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", available=" + available + "} ";
     }
 
     public long getId() {

@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
-import org.nikita.jdbctask.mapper.ProductMapper;
+import org.nikita.jdbctask.mapper.dto.ProductDTOMapper;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class ViewProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
-        ProductMapper mapper = new ProductMapper();
+        ProductDTOMapper mapper = new ProductDTOMapper();
         List<ProductDTO> productList = new ArrayList<>();
 
         try {

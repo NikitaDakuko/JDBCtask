@@ -7,7 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
-import org.nikita.jdbctask.mapper.ProductMapper;
 import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
@@ -34,7 +33,6 @@ public class EditProductServlet extends HttpServlet {
 
         ProductDAO dao = new ProductDAO();
         dao.update(p);
-        ProductMapper mapper = new ProductMapper();
-        resp.getOutputStream().println(mapper.fromDTO(p).toString());
+        resp.getOutputStream().println(p.toString());
     }
 }

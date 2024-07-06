@@ -3,10 +3,8 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
 
 public class ProductDAO implements DAO<ProductDTO> {
     private final String tableName = "public.product";
@@ -38,6 +36,21 @@ public class ProductDAO implements DAO<ProductDTO> {
     @Override
     public ResultSet getAll() {
         return defaultGetAll(connection, tableName);
+    }
+
+    public ResultSet getMultiple(List<Long> ids){
+        try {
+            Statement statement = getConnection().createStatement();
+            String idString = ids.toString().replace("[", "(").replace("]", ")");
+
+            return statement.executeQuery(
+                    "SELECT * FROM " + tableName + " WHERE id IN (" + idString + ")");
+        }
+        catch (SQLException e) {
+            System.out.println(
+                    "Could not find " + tableName + " record, SQLException: "+ e.getMessage());
+        }
+        return null;
     }
 
     @Override

@@ -1,16 +1,13 @@
-package org.nikita.jdbctask.mapper;
+package org.nikita.jdbctask.mapper.entity;
 
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.entity.Product;
-import org.nikita.jdbctask.interfaces.Mapper;
-import org.postgresql.util.PGmoney;
+import org.nikita.jdbctask.interfaces.EntityMapper;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductMapper implements Mapper<Product, ProductDTO> {
+public class ProductEntityMapper implements EntityMapper<Product, ProductDTO> {
     @Override
     public Product fromDTO(ProductDTO dto){
         return new Product(
@@ -31,26 +28,6 @@ public class ProductMapper implements Mapper<Product, ProductDTO> {
                 product.getQuantity(),
                 product.getAvailability()
         );
-    }
-
-    @Override
-    public ProductDTO fromResult(ResultSet resultSet){
-        try {
-            return new ProductDTO(
-                    resultSet.getLong("id"),
-                    resultSet.getString("name"),
-                    new PGmoney(resultSet
-                            .getString("price")
-                            .substring(2)
-                            .replace(",", "")),
-                    resultSet.getInt("quantity"),
-                    resultSet.getBoolean("available")
-            );
-        }
-        catch (SQLException e) {
-            System.out.println("SQLException: "+ e.getMessage());
-        }
-        return null;
     }
 
     public List<ProductDTO> toDTO(List<Product> products){

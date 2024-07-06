@@ -2,7 +2,9 @@ package org.nikita.jdbctask.dto;
 
 import org.postgresql.util.PGmoney;
 
-public class ProductDTO {
+import java.io.Serializable;
+
+public class ProductDTO implements Serializable {
     private Long id;
     private final String name;
     private final PGmoney price;
@@ -19,6 +21,16 @@ public class ProductDTO {
         this.price = price;
         this.quantity = quantity;
         this.available = available;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                " id=" + id +
+                ", name=" + name +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                ", available=" + available + "} ";
     }
 
     public long getId() {

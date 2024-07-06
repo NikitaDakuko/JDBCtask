@@ -1,4 +1,4 @@
-package org.nikita.jdbctask.servlet.order.detail;
+package org.nikita.jdbctask.servlet.orderapproval;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,8 +11,8 @@ import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
 
-@WebServlet("/editOrderDetails")
-public class EditOrderDetailServlet extends HttpServlet {
+@WebServlet("/editOrderApproval")
+public class EditOrderApprovalServlet extends HttpServlet {
 
     private Long id;
 

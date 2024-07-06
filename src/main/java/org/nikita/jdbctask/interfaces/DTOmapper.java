@@ -5,11 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface Mapper<T, DTO> {
-    T fromDTO(DTO dto);
-
-    DTO toDTO(T t);
-
+public interface DTOmapper<DTO> {
     DTO fromResult(ResultSet resultSet);
 
     default List<DTO> listFromResult(ResultSet resultSet){

@@ -36,7 +36,7 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
         }
         catch (SQLException e) {
             System.out.println(
-                    "Could not find products for orderId = " + orderId + ", SQLException: "+ e.getMessage());
+                    "Could not find products for orderId= " + orderId + ", SQLException: "+ e.getMessage());
         }
         return null;
     }
@@ -48,11 +48,20 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
 
     @Override
     public void update(OrderProductDTO dto) {
-
+        delete(dto.getOrderDetailId());
+        create(dto);
     }
 
     @Override
-    public void delete(Long id){
-        defaultDelete(connection, tableName, id);
+    public void delete(Long orderDetailId){
+        try {
+            if(connection.createStatement().executeUpdate(
+                    "DELETE FROM " + tableName +
+                            " WHERE orderId=" + orderDetailId) != 1) throw new SQLException();
+        }
+        catch (SQLException e) {
+            System.out.println(
+                    "Could not delete " + tableName + " record with orderId = " + orderDetailId + ", SQLException: "+ e.getMessage());
+        }
     }
 }

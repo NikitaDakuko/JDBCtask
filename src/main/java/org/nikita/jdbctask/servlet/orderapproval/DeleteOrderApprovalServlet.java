@@ -1,4 +1,4 @@
-package org.nikita.jdbctask.servlet.order.approval;
+package org.nikita.jdbctask.servlet.orderapproval;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

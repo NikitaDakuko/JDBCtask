@@ -1,4 +1,4 @@
-package org.nikita.jdbctask.entity;
+package org.nikita.jdbctask.enums;
 
 public enum OrderStatus {
     NEW,

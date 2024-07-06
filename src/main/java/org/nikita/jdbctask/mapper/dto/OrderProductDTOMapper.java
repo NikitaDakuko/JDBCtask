@@ -1,24 +1,14 @@
-package org.nikita.jdbctask.mapper;
+package org.nikita.jdbctask.mapper.dto;
 
 import org.nikita.jdbctask.dto.OrderProductDTO;
-import org.nikita.jdbctask.interfaces.Mapper;
+import org.nikita.jdbctask.interfaces.DTOmapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderProductMapper implements Mapper<List<Long>, OrderProductDTO> {
-    @Override
-    public List<Long> fromDTO(OrderProductDTO dto) {
-        return List.of();
-    }
-
-    @Override
-    public OrderProductDTO toDTO(List<Long> longs) {
-        return null;
-    }
-
+public class OrderProductDTOMapper implements DTOmapper<OrderProductDTO> {
     @Override
     public OrderProductDTO fromResult(ResultSet resultSet) {
         try {
