@@ -3,8 +3,6 @@ package org.nikita.jdbctask.entity;
 import org.postgresql.util.PGmoney;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 public class OrderDetail implements Serializable {
@@ -22,18 +20,6 @@ public class OrderDetail implements Serializable {
     public OrderDetail(Long id, OrderStatus orderStatus, List<Product> products, PGmoney totalAmount){
         this(orderStatus, products, totalAmount);
         this.id = id;
-    }
-
-    public static OrderDetail fromResult(ResultSet result) throws SQLException {
-        return new OrderDetail(
-                result.getLong("id"),
-                OrderStatus.valueOf(result.getString("oderStatus")),
-                (List<Product>) result.getArray("products"),
-                new PGmoney(result
-                        .getString("totalAmount")
-                        .substring(2)
-                        .replace(",", ""))
-        );
     }
 
     public String toString(){

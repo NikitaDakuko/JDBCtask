@@ -1,8 +1,6 @@
 package org.nikita.jdbctask.entity;
 
 import java.io.Serializable;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class OrderApproval implements Serializable {
     private long id;
@@ -17,14 +15,6 @@ public class OrderApproval implements Serializable {
     public OrderApproval (long id, long orderId, OrderDetail orderDetail){
         this(orderId, orderDetail);
         this.id = orderId;
-    }
-
-    public static OrderApproval fromResult(ResultSet result) throws SQLException {
-        return new OrderApproval(
-                result.getLong("id"),
-                result.getLong("orderId"),
-                result.getObject("orderDetail", OrderDetail.class)
-        );
     }
 
     public String toString(){

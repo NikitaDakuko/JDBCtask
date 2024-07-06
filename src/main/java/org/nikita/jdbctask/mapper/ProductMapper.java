@@ -7,6 +7,8 @@ import org.postgresql.util.PGmoney;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductMapper implements Mapper<Product, ProductDTO> {
     @Override
@@ -21,7 +23,7 @@ public class ProductMapper implements Mapper<Product, ProductDTO> {
     }
 
     @Override
-    public ProductDTO fromEntity(Product product) {
+    public ProductDTO toDTO(Product product) {
         return new ProductDTO(
                 product.getId(),
                 product.getName(),
@@ -43,5 +45,23 @@ public class ProductMapper implements Mapper<Product, ProductDTO> {
                 result.getInt("quantity"),
                 result.getBoolean("available")
         );
+    }
+
+    public List<ProductDTO> toDTO(List<Product> products){
+        List<ProductDTO> productList = new ArrayList<>();
+
+        for(Product product:products)
+            productList.add(toDTO(product));
+
+        return productList;
+    }
+
+    public List<Product> fromDTO(List<ProductDTO> products){
+        List<Product> productList = new ArrayList<>();
+
+        for(ProductDTO dto:products)
+            productList.add(fromDTO(dto));
+
+        return productList;
     }
 }

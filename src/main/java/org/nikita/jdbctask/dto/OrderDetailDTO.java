@@ -1,7 +1,6 @@
 package org.nikita.jdbctask.dto;
 
 import org.nikita.jdbctask.entity.OrderStatus;
-import org.nikita.jdbctask.entity.Product;
 import org.postgresql.util.PGmoney;
 
 import java.util.List;
@@ -9,16 +8,16 @@ import java.util.List;
 public class OrderDetailDTO {
     private long id;
     private final OrderStatus orderStatus;
-    private final List<Product> products;
+    private final List<ProductDTO> products;
     private final PGmoney totalAmount;
 
-    public OrderDetailDTO(OrderStatus orderStatus, List<Product> products, PGmoney totalAmount){
+    public OrderDetailDTO(OrderStatus orderStatus, List<ProductDTO> products, PGmoney totalAmount){
         this.orderStatus = orderStatus;
         this.products = products;
         this.totalAmount = totalAmount;
     }
 
-    public OrderDetailDTO(Long id, OrderStatus orderStatus, List<Product> products, PGmoney totalAmount){
+    public OrderDetailDTO(Long id, OrderStatus orderStatus, List<ProductDTO> products, PGmoney totalAmount){
         this(orderStatus, products, totalAmount);
         this.id = id;
     }
@@ -31,7 +30,7 @@ public class OrderDetailDTO {
         return orderStatus;
     }
 
-    public List<Product> getProducts() {
+    public List<ProductDTO> getProducts() {
         return products;
     }
 
