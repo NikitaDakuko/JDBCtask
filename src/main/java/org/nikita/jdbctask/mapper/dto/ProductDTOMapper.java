@@ -33,7 +33,7 @@ public class ProductDTOMapper implements DTOmapper<ProductDTO> {
 
     public List<ProductDTO> parseProductsString(String productsString){
         List<Long> ids = new ArrayList<>();
-        for (String s:productsString.split(",")){
+        for (String s:productsString.replaceAll("\\s+","").split(",")){
             ids.add(Long.parseLong(s));
         }
         return listFromResult(new ProductDAO().getMultiple(ids));

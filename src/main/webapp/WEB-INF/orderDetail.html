@@ -9,7 +9,13 @@
     <p>Enter order details:</p>
     <label>
         Order status
-        <input type="text" name="orderStatus">
+        <select name="orderStatus">
+            <option value="NEW">New</option>
+            <option value="PROCESSING">Processing</option>
+            <option value="COMPLETE">Complete</option>
+        </select>
+
+
     </label> <br>
     <label>
         Product ids (separated by comma)
