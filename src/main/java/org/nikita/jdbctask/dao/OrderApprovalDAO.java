@@ -1,5 +1,6 @@
 package org.nikita.jdbctask.dao;
 
+import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderApprovalDTO;
 import org.nikita.jdbctask.interfaces.DAO;
 
@@ -8,7 +9,15 @@ import java.sql.ResultSet;
 
 public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     private final String tableName = "public.orderApproval";
-    private final Connection connection = getConnection();
+    private final Connection connection;
+
+    public OrderApprovalDAO(Connection connection){
+        this.connection = connection;
+    }
+
+    public OrderApprovalDAO(){
+        this.connection = DatabaseConfig.getConnection();
+    }
 
     @Override
     public void create(OrderApprovalDTO orderApproval){

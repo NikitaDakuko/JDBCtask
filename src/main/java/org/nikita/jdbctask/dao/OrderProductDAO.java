@@ -1,5 +1,6 @@
 package org.nikita.jdbctask.dao;
 
+import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
 
@@ -7,7 +8,15 @@ import java.sql.*;
 
 public class OrderProductDAO implements DAO<OrderProductDTO> {
     private final String tableName = "public.\"orderProducts\"";
-    private final Connection connection = getConnection();
+    private final Connection connection;
+
+    public OrderProductDAO(Connection connection){
+        this.connection = connection;
+    }
+
+    public OrderProductDAO(){
+        this.connection = DatabaseConfig.getConnection();
+    }
 
     @Override
     public void create(OrderProductDTO dto) {

@@ -1,5 +1,4 @@
-package org.nikita.jdbctask;
-
+import org.nikita.jdbctask.DatabaseConfig;
 import org.postgresql.Driver;
 
 import java.io.IOException;
@@ -9,13 +8,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DatabaseConfig {
+public class TestDatabaseConfig {
     private static final Properties properties = new Properties();
 
     static {
-        try (InputStream input = DatabaseConfig.class.getClassLoader().getResourceAsStream("db.properties")) {
+        try (InputStream input = DatabaseConfig.class.getClassLoader().getResourceAsStream("testDB.properties")) {
             if (input == null) {
-                System.out.println("Sorry, unable to find db.properties");
+                System.out.println("Sorry, unable to find testDB.properties");
                 System.exit(1);
             }
 
@@ -26,13 +25,13 @@ public class DatabaseConfig {
         }
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         try {
             DriverManager.registerDriver(new Driver());
             return DriverManager.getConnection(
-                    properties.getProperty("db.url"),
-                    properties.getProperty("db.username"),
-                    properties.getProperty("db.password")
+                    properties.getProperty("testDB.url"),
+                    properties.getProperty("testDB.username"),
+                    properties.getProperty("testDB.password")
             );
         } catch (SQLException e) {
             throw new RuntimeException(e);

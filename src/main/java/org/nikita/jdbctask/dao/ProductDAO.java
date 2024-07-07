@@ -1,5 +1,6 @@
 package org.nikita.jdbctask.dao;
 
+import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
 
@@ -8,7 +9,15 @@ import java.util.List;
 
 public class ProductDAO implements DAO<ProductDTO> {
     private final String tableName = "public.product";
-    private final Connection connection = getConnection();
+    private final Connection connection;
+
+    public ProductDAO(Connection connection){
+        this.connection = connection;
+    }
+
+    public ProductDAO(){
+        this.connection = DatabaseConfig.getConnection();
+    }
 
     @Override
     public void create(ProductDTO product){
@@ -40,7 +49,7 @@ public class ProductDAO implements DAO<ProductDTO> {
 
     public ResultSet getMultiple(List<Long> ids){
         try {
-            Statement statement = getConnection().createStatement();
+            Statement statement = connection.createStatement();
             String idString = ids.toString().replace("[", "(").replace("]", ")");
 
             return statement.executeQuery(
