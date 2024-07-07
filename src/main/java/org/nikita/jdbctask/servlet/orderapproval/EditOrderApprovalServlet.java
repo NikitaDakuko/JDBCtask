@@ -14,7 +14,7 @@ import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
 
-@WebServlet("/editOrderApproval")
+@WebServlet("editOrderApproval")
 public class EditOrderApprovalServlet extends HttpServlet {
 
     private Long id;

@@ -11,7 +11,7 @@ import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
 
-@WebServlet("/createProduct")
+@WebServlet("createProduct")
 public class CreateProductServlet extends HttpServlet {
 
     @Override
