@@ -6,8 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderApprovalDAO;
-import org.nikita.jdbctask.dto.OrderDetailDTO;
-import org.nikita.jdbctask.mapper.dto.OrderDetailDTOMapper;
+import org.nikita.jdbctask.dto.OrderApprovalDTO;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,14 +17,13 @@ public class ViewOrderApprovalServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderApprovalDAO db = new OrderApprovalDAO();
-        OrderDetailDTOMapper mapper = new OrderDetailDTOMapper();
-        List<OrderDetailDTO> orderApprovals = new ArrayList<>();
+        List<OrderApprovalDTO> orderApprovals = new ArrayList<>();
 
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            orderApprovals.add(mapper.fromResult(db.findById(id)));
+            orderApprovals.add(db.findById(id));
         } catch (Exception e) {
-            orderApprovals = mapper.listFromResult(db.getAll());
+            orderApprovals = db.getAll();
         }
         resp.getOutputStream().println(orderApprovals.toString());
     }

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public interface DAO<T> {
     default ResultSet defaultFindById(Connection connection, String tableName, Long id){
@@ -46,9 +47,9 @@ public interface DAO<T> {
 
     void create(T item);
 
-    ResultSet findById(Long id);
+    T findById(Long id);
 
-    ResultSet getAll();
+    List<T> getAll();
 
     void update(T newItem);
 

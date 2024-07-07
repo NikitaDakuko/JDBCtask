@@ -3,14 +3,16 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.dto.OrderDetailDTOMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     private final String tableName = "public.\"orderDetail\"";
+    private final OrderDetailDTOMapper mapper = new OrderDetailDTOMapper();
     private final Connection connection;
 
     public OrderDetailDAO(Connection connection){
@@ -38,13 +40,13 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     }
 
     @Override
-    public ResultSet findById(Long id) {
-        return defaultFindById(connection, tableName, id);
+    public OrderDetailDTO findById(Long id) {
+        return mapper.fromResult(defaultFindById(connection, tableName, id));
     }
 
     @Override
-    public ResultSet getAll() {
-        return defaultGetAll(connection, tableName);
+    public List<OrderDetailDTO> getAll() {
+        return mapper.listFromResult(defaultGetAll(connection, tableName));
     }
 
     @Override

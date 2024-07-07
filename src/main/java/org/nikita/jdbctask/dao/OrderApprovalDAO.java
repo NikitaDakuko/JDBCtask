@@ -3,12 +3,14 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderApprovalDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.dto.OrderApprovalDTOMapper;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
+import java.util.List;
 
 public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     private final String tableName = "public.orderApproval";
+    private final OrderApprovalDTOMapper mapper = new OrderApprovalDTOMapper();
     private final Connection connection;
 
     public OrderApprovalDAO(Connection connection){
@@ -38,13 +40,13 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     }
 
     @Override
-    public ResultSet findById(Long id) {
-        return defaultFindById(connection, tableName, id);
+    public OrderApprovalDTO findById(Long id) {
+        return mapper.fromResult(defaultFindById(connection, tableName, id));
     }
 
     @Override
-    public ResultSet getAll() {
-        return defaultGetAll(connection, tableName);
+    public List<OrderApprovalDTO> getAll() {
+        return mapper.listFromResult(defaultGetAll(connection, tableName));
     }
 
     @Override

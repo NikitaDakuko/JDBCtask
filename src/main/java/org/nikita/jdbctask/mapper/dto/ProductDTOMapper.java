@@ -36,6 +36,6 @@ public class ProductDTOMapper implements DTOmapper<ProductDTO> {
         for (String s:productsString.replaceAll("\\s+","").split(",")){
             ids.add(Long.parseLong(s));
         }
-        return listFromResult(new ProductDAO().getMultiple(ids));
+        return new ProductDAO().getMultiple(ids);
     }
 }

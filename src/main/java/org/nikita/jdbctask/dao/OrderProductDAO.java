@@ -3,11 +3,14 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.dto.OrderProductDTOMapper;
 
 import java.sql.*;
+import java.util.List;
 
 public class OrderProductDAO implements DAO<OrderProductDTO> {
     private final String tableName = "public.\"orderProducts\"";
+    private final OrderProductDTOMapper mapper = new OrderProductDTOMapper();
     private final Connection connection;
 
     public OrderProductDAO(Connection connection){
@@ -36,12 +39,11 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
         }
     }
 
-    @Override
-    public ResultSet findById(Long orderId) {
+    public List<OrderProductDTO> findByOrderId(Long orderId) {
         try {
             Statement statement = connection.createStatement();
-            return statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE orderId=" + orderId);
+            return mapper.listFromResult(statement.executeQuery(
+                    "SELECT * FROM " + tableName + " WHERE orderId=" + orderId));
         }
         catch (SQLException e) {
             System.out.println(
@@ -51,7 +53,10 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
     }
 
     @Override
-    public ResultSet getAll() {
+    public OrderProductDTO findById(Long orderId) { return null; }
+
+    @Override
+    public List<OrderProductDTO> getAll() {
         return null;
     }
 

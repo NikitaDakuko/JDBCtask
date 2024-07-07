@@ -3,12 +3,14 @@ package org.nikita.jdbctask.dao;
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
+import org.nikita.jdbctask.mapper.dto.ProductDTOMapper;
 
 import java.sql.*;
 import java.util.List;
 
 public class ProductDAO implements DAO<ProductDTO> {
     private final String tableName = "public.product";
+    private final ProductDTOMapper mapper = new ProductDTOMapper();
     private final Connection connection;
 
     public ProductDAO(Connection connection){
@@ -38,22 +40,22 @@ public class ProductDAO implements DAO<ProductDTO> {
     }
 
     @Override
-    public ResultSet findById(Long id) {
-        return defaultFindById(connection, tableName, id);
+    public ProductDTO findById(Long id) {
+        return mapper.fromResult(defaultFindById(connection, tableName, id));
     }
 
     @Override
-    public ResultSet getAll() {
-        return defaultGetAll(connection, tableName);
+    public List<ProductDTO> getAll() {
+        return mapper.listFromResult(defaultGetAll(connection, tableName));
     }
 
-    public ResultSet getMultiple(List<Long> ids){
+    public List<ProductDTO> getMultiple(List<Long> ids){
         try {
             Statement statement = connection.createStatement();
             String idString = ids.toString().replace("[", "(").replace("]", ")");
 
-            return statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id IN (" + idString + ")");
+            return mapper.listFromResult(statement.executeQuery(
+                    "SELECT * FROM " + tableName + " WHERE id IN (" + idString + ")"));
         }
         catch (SQLException e) {
             System.out.println(
