@@ -9,7 +9,7 @@ import org.nikita.jdbctask.dao.OrderApprovalDAO;
 
 import java.io.IOException;
 
-@WebServlet("deleteOrderApproval")
+@WebServlet("/deleteOrderApproval")
 public class DeleteOrderApprovalServlet extends HttpServlet {
 
     @Override
