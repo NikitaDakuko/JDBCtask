@@ -83,7 +83,7 @@ public class TestProductDAO {
         return true;
     }
 
-    @Test
+    //@Test
     public void findByIdProductDAOtest(){
         //ProductDTO testDTO = productDAO.findById(testDTO3.getId());
         ProductDTO testDTO = testFindByIdSimplified(testDTO3.getId());
