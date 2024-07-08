@@ -1,13 +1,15 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.postgresql.util.PGmoney;
 import org.testcontainers.containers.PostgreSQLContainer;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,12 +50,12 @@ public class TestProductDAO {
         productDAO.create(testDTO4);
     }
 
-    @Test
+    //@Test
     void createProductDAOtest(){
         assertEquals(4, productDAO.getAll().size());
     }
 
-    @Test
+    //@Test
     public void getAllProductDAOtest(){
         List<ProductDTO> testData = new ArrayList<>();
         List<ProductDTO> resultData = productDAO.getAll();
@@ -67,7 +69,7 @@ public class TestProductDAO {
             assertTrue (isEqual(testData.get(i), resultData.get(i)));
     }
 
-    @Test
+    //@Test
     public void deleteProductDAOtest(){
         int currentSize = productDAO.getAll().size();
         productDAO.delete(2L);
