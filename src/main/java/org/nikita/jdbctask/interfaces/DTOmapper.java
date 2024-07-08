@@ -8,6 +8,16 @@ import java.util.List;
 public interface DTOmapper<DTO> {
     DTO fromResult(ResultSet resultSet);
 
+    default DTO singleFromResult(ResultSet resultSet){
+        try {
+            if (resultSet.next())
+                return fromResult(resultSet);
+        } catch (SQLException e) {
+            System.out.println("SQLException while parsing resultSet: "+ e.getMessage());
+        }
+        return null;
+    }
+
     default List<DTO> listFromResult(ResultSet resultSet){
         List<DTO> dtos = new ArrayList<>();
         try {
@@ -16,7 +26,7 @@ public interface DTOmapper<DTO> {
             }
         }
         catch (SQLException e) {
-            System.out.println("SQLException: "+ e.getMessage());
+            System.out.println("SQLException while parsing resultSet: "+ e.getMessage());
         }
         return dtos;
     }

@@ -14,19 +14,20 @@ public class ProductDTOMapper implements DTOmapper<ProductDTO> {
     @Override
     public ProductDTO fromResult(ResultSet resultSet){
         try {
-            return new ProductDTO(
-                    resultSet.getLong("id"),
-                    resultSet.getString("name"),
-                    new PGmoney(resultSet
-                            .getString("price")
-                            .substring(2)
-                            .replace(",", "")),
-                    resultSet.getInt("quantity"),
-                    resultSet.getBoolean("available")
-            );
+            if (resultSet != null){
+                return new ProductDTO(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        new PGmoney(resultSet
+                                .getString("price")
+                                .replace(",", "")),
+                        resultSet.getInt("quantity"),
+                        resultSet.getBoolean("available")
+                );
+            }
         }
         catch (SQLException e) {
-            System.out.println("SQLException: "+ e.getMessage());
+            System.out.println("SQLException while parsing product: " + e.getMessage());
         }
         return null;
     }

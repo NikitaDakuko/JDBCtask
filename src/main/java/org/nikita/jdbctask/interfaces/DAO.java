@@ -11,7 +11,7 @@ public interface DAO<T> {
         try {
             Statement statement = connection.createStatement();
             return statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id=" + id);
+                    "SELECT * FROM " + tableName + " WHERE id = " + id);
         }
         catch (SQLException e) {
             System.out.println(

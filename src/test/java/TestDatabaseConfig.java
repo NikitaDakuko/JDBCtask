@@ -18,7 +18,6 @@ public class TestDatabaseConfig {
                 System.exit(1);
             }
 
-            // Load the properties file
             properties.load(input);
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -33,6 +32,25 @@ public class TestDatabaseConfig {
                     properties.getProperty("testDB.username"),
                     properties.getProperty("testDB.password")
             );
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void recreateProductsTable(){
+        try {
+            getConnection().prepareStatement(
+                    "DROP TABLE IF EXISTS public.\"product\";\n" +
+                            "CREATE TABLE IF NOT EXISTS public.\"product\"\n" +
+                            "(\n" +
+                            "    id serial NOT NULL,\n" +
+                            "    name character varying(255) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
+                            "    price money NOT NULL,\n" +
+                            "    quantity integer NOT NULL,\n" +
+                            "    available boolean NOT NULL,\n" +
+                            "    PRIMARY KEY (id)" +
+                            ")").execute();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

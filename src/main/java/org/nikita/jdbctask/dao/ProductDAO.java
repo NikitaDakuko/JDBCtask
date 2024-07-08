@@ -41,7 +41,7 @@ public class ProductDAO implements DAO<ProductDTO> {
 
     @Override
     public ProductDTO findById(Long id) {
-        return mapper.fromResult(defaultFindById(connection, tableName, id));
+        return mapper.singleFromResult(defaultFindById(connection, tableName, id));
     }
 
     @Override

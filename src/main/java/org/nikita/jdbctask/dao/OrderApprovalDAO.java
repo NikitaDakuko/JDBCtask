@@ -41,7 +41,7 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public OrderApprovalDTO findById(Long id) {
-        return mapper.fromResult(defaultFindById(connection, tableName, id));
+        return mapper.singleFromResult(defaultFindById(connection, tableName, id));
     }
 
     @Override

@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
-			<version>5.11.0-M1</version>
+			<version>5.10.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
@@ -54,7 +54,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>jakartaee-hello-world</finalName>
+		<finalName>JDBC test task</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
