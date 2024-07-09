@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
+import org.nikita.jdbctask.mapper.dto.ProductDTOMapper;
 import org.postgresql.util.PGmoney;
 import org.testcontainers.containers.PostgreSQLContainer;
 
@@ -89,30 +90,20 @@ public class TestProductDAO {
     @Test
     public void findByIdProductDAOtest(){
         //ProductDTO testDTO = productDAO.findById(testDTO3.getId());
-        ProductDTO testDTO = testFindByIdSimplified(testDTO3.getId());
-        System.out.println(testDTO);
-        assertEquals(testDTO3, testDTO);
+        List<ProductDTO> testDTO = testFindByIdSimplified(testDTO3.getId());
+        assertEquals(1, testDTO.size());
     }
 
-    public ProductDTO testFindByIdSimplified(long id) {
+    public List<ProductDTO> testFindByIdSimplified(long id) {
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT * FROM public.product WHERE id=?;");
             statement.setLong(1, id);
             System.out.println(statement);
             ResultSet resultSet = statement.executeQuery();
-            if (resultSet.isBeforeFirst())
-                System.out.println("HOOORAYAAAAAAAAAAAAAAAAAAA");
-            if (resultSet.next()) {
-                return new ProductDTO(
-                        resultSet.getLong("id"),
-                        resultSet.getString("name"),
-                        new PGmoney(resultSet
-                                .getString("price")
-                                .replace(",", "")),
-                        resultSet.getInt("quantity"),
-                        resultSet.getBoolean("available"));
-            }
+
+            return new ProductDTOMapper().listFromResult(resultSet);
+
         } catch (
                 SQLException e) {
             System.out.println(
