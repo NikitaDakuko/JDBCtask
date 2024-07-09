@@ -64,8 +64,6 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public List<OrderApprovalDTO> getAll() {
-        List<OrderApprovalDTO> dtos = new ArrayList<>();
-
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT * FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
