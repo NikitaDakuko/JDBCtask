@@ -60,7 +60,6 @@ public class TestOrderDetailDAO {
     public void getAllDAOtest(){
         List<OrderDetailDTO> testData = new ArrayList<>();
         List<OrderDetailDTO> resultData = dao.getAll();
-        System.out.println(resultData);
         testData.add(testDTO1);
         testData.add(testDTO2);
         testData.add(testDTO3);
@@ -73,7 +72,6 @@ public class TestOrderDetailDAO {
     @Test
     public void findByIdDAOtest(){
         OrderDetailDTO testDTO = dao.findById(testDTO3.getId());
-        System.out.println(testDTO);
         isEqual(testDTO3, testDTO);
     }
 
@@ -88,6 +86,6 @@ public class TestOrderDetailDAO {
         assertEquals(dto1.getId(), dto2.getId());
         assertEquals(dto1.getOrderStatus(), dto2.getOrderStatus());
         assertEquals(dto1.getTotalAmount(), dto2.getTotalAmount());
-        //assertEquals(dto1.getProducts(), dto2.getProducts());
+        assertEquals(dto1.getProducts(), dto2.getProducts());
     }
 }

@@ -45,7 +45,7 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
 
     @Override
     public OrderDetailDTO findById(Long id) {
-        return mapper.fromResult(defaultFindById(connection, tableName, id));
+        return mapper.listFromResult(defaultFindById(connection, tableName, id)).get(0);
     }
 
     @Override
