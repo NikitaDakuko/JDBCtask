@@ -7,6 +7,7 @@ import org.nikita.jdbctask.mapper.dto.OrderDetailDTOMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -24,20 +25,22 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     }
 
     @Override
-    public void create(OrderDetailDTO orderDetail){
+    public ResultSet create(OrderDetailDTO orderDetail){
         try {
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + tableName +
-                            "(\"orderStatus\", \"totalAmount\") " +
-                            "VALUES (?, ?)");
-            statement.setString(1, orderDetail.getOrderStatus().name());
-            statement.setBigDecimal(2, orderDetail.getTotalAmount());
-
-            if (statement.executeUpdate()!=1) throw new SQLException();
+            PreparedStatement insertDetailsStatement = connection.prepareStatement(
+                    "INSERT INTO public.\"orderDetail\"(\n" +
+                            "id, \"totalAmount\", \"orderStatus\")\n" +
+                            "output Inserted.id\n" +
+                            "VALUES (?, ?, ?);");
+            insertDetailsStatement.setLong(1, orderDetail.getId());
+            insertDetailsStatement.setBigDecimal(2, orderDetail.getTotalAmount());
+            insertDetailsStatement.setString(3, orderDetail.getOrderStatus().name());
+            return insertDetailsStatement.executeQuery();
         }
         catch (SQLException e) {
             System.out.println("Could not create orderDetail, SQLException: "+ e.getMessage());
         }
+        return null;
     }
 
     @Override

@@ -22,22 +22,24 @@ public class ProductDAO implements DAO<ProductDTO> {
     }
 
     @Override
-    public void create(ProductDTO product){
+    public ResultSet create(ProductDTO product){
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName +
-                            "(name, price, quantity, available) " +
-                            "VALUES (?, ?, ?, ?)");
-            statement.setString(1, product.getName());
-            statement.setBigDecimal(2, product.getPrice());
-            statement.setLong(3, product.getQuantity());
-            statement.setBoolean(4, product.getAvailability());
+                            "(id, name, price, quantity, available) " +
+                            "VALUES (?, ?, ?, ?, ?)");
+            statement.setLong(1, product.getId());
+            statement.setString(2, product.getName());
+            statement.setBigDecimal(3, product.getPrice());
+            statement.setLong(4, product.getQuantity());
+            statement.setBoolean(5, product.getAvailability());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
         catch (SQLException e) {
             System.out.println("Could not create product, SQLException: "+ e.getMessage());
         }
+        return null;
     }
 
     @Override

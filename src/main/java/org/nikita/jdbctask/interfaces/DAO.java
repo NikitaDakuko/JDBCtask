@@ -1,6 +1,7 @@
 package org.nikita.jdbctask.interfaces;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface DAO<T> {
@@ -13,8 +14,8 @@ public interface DAO<T> {
         catch (SQLException e) {
             System.out.println(
                     "Could not find " + tableName + " record with id = " + id + ", SQLException: "+ e.getMessage());
+            return null;
         }
-        return null;
     }
 
     default ResultSet defaultGetAll(Connection connection, String tableName){
@@ -41,7 +42,22 @@ public interface DAO<T> {
         }
     }
 
-    void create(T item);
+    default List<Long> returnIds (ResultSet resultSet){
+        try {
+            List<Long> insertedIds = new ArrayList<>();
+            while (resultSet.next()){
+                insertedIds.add(resultSet.getLong(1));
+            }
+            return insertedIds;
+        }
+        catch (SQLException e) {
+            System.out.println(
+                    "Could not return inserted record ids, SQLException: "+ e.getMessage());
+            return null;
+        }
+    }
+
+    ResultSet create(T item);
 
     T findById(Long id);
 

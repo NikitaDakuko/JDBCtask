@@ -22,7 +22,7 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
     }
 
     @Override
-    public void create(OrderProductDTO dto) {
+    public ResultSet create(OrderProductDTO dto) {
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName + "(\"orderDetailId\", \"productId\") VALUES (?, ?);");
@@ -37,6 +37,7 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
         catch (SQLException e) {
             System.out.println("Could not create orderProducts, SQLException: "+ e.getMessage());
         }
+        return null;
     }
 
     public List<OrderProductDTO> findByOrderId(Long orderId) {
