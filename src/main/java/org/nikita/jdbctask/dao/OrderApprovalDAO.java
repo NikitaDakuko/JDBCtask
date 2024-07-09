@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
-    private final String tableName = "public.\"orderApproval\"";
     private final OrderDetailDAO orderDetailDAO;
     private final OrderProductDAO orderProductDAO;
     private final OrderApprovalDTOMapper mapper = new OrderApprovalDTOMapper();
@@ -60,12 +59,30 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public OrderApprovalDTO findById(Long id) {
-        return mapper.fromResult(defaultFindById(connection, tableName, id));
+        return mapper.fromResult(defaultFindById(connection, DatabaseConfig.orderApprovalTableName, id));
     }
 
     @Override
     public List<OrderApprovalDTO> getAll() {
-        return mapper.listFromResult(defaultGetAll(connection, tableName));
+        List<OrderApprovalDTO> dtos = new ArrayList<>();
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
+                            "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
+                            "ON oa.\"orderDetailId\" = od.\"id\"\n" +
+                            "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                            "ON od.\"id\" = op.\"orderDetailId\"\n" +
+                            "JOIN " + DatabaseConfig.productTableName + " p\n" +
+                            "ON op.\"productId\" = p.id"
+            );
+            return mapper.listFromResult(statement.executeQuery());
+        }
+        catch (SQLException e) {
+            System.out.println(
+                    "Could not find " + DatabaseConfig.orderApprovalTableName + " record, SQLException: " + e.getMessage());
+        }
+        return null;
     }
 
     @Override
@@ -74,6 +91,6 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public void delete(Long id){
-        defaultDelete(connection, tableName, id);
+        defaultDelete(connection, DatabaseConfig.orderApprovalTableName, id);
     }
 }

@@ -9,7 +9,6 @@ import java.sql.*;
 import java.util.List;
 
 public class ProductDAO implements DAO<ProductDTO> {
-    private final String tableName = "public.product";
     private final ProductDTOMapper mapper = new ProductDTOMapper();
     private final Connection connection;
 
@@ -25,7 +24,7 @@ public class ProductDAO implements DAO<ProductDTO> {
     public ResultSet create(ProductDTO product){
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + tableName +
+                    "INSERT INTO " + DatabaseConfig.productTableName +
                             "(id, name, price, quantity, available) " +
                             "VALUES (?, ?, ?, ?, ?)");
             statement.setLong(1, product.getId());
@@ -44,20 +43,20 @@ public class ProductDAO implements DAO<ProductDTO> {
 
     @Override
     public ProductDTO findById(Long id) {
-        List<ProductDTO> results = mapper.listFromResult(defaultFindById(connection, tableName ,id));
+        List<ProductDTO> results = mapper.listFromResult(defaultFindById(connection, DatabaseConfig.productTableName ,id));
         return results.get(0);
     }
 
     @Override
     public List<ProductDTO> getAll() {
-        return mapper.listFromResult(defaultGetAll(connection, tableName));
+        return mapper.listFromResult(defaultGetAll(connection, DatabaseConfig.productTableName));
     }
 
     public List<ProductDTO> getMultiple(List<Long> ids){
         try {
             String idString = ids.toString().replace("[", "(").replace("]", ")");
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM " + tableName + " WHERE id IN " + idString);
+                    "SELECT * FROM " + DatabaseConfig.productTableName + " WHERE id IN " + idString);
             // idArray = connection.createArrayOf("INTEGER", ids.toArray());
             //statement.setArray(1, idArray);
 
@@ -65,7 +64,7 @@ public class ProductDAO implements DAO<ProductDTO> {
         }
         catch (SQLException e) {
             System.out.println(
-                    "Could not find " + tableName + " record, SQLException: "+ e.getMessage());
+                    "Could not find " + DatabaseConfig.productTableName + " record, SQLException: "+ e.getMessage());
         }
         return null;
     }
@@ -74,7 +73,7 @@ public class ProductDAO implements DAO<ProductDTO> {
     public void update(ProductDTO product){
         try {
             PreparedStatement statement = connection.prepareStatement(
-                    "UPDATE " + tableName +
+                    "UPDATE " + DatabaseConfig.productTableName +
                             " SET name = ?, price = ?, quantity = ?, available = ?" +
                             " WHERE id = ?");
             statement.setString(1, product.getName());
@@ -92,6 +91,6 @@ public class ProductDAO implements DAO<ProductDTO> {
 
     @Override
     public void delete(Long id){
-        defaultDelete(connection, tableName, id);
+        defaultDelete(connection, DatabaseConfig.productTableName, id);
     }
 }

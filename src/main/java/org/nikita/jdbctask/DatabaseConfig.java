@@ -11,6 +11,11 @@ import java.util.Properties;
 
 public class DatabaseConfig {
     private static final Properties properties = new Properties();
+    public static final String productTableName = "product";
+    public static final String orderApprovalTableName = "\"orderApproval\"";
+    public static final String orderDetailTableName = "\"orderDetail\"";
+    public static final String orderProductTableName = "\"orderProduct\"";
+
 
     static {
         try (InputStream input = DatabaseConfig.class.getClassLoader().getResourceAsStream("db.properties")) {

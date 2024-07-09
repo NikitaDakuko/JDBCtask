@@ -47,12 +47,12 @@ public class TestOrderDetailDAO {
         TestDatabaseConfig.recreateOrderDetailTable(connection);
         dao.create(testDTO1);
         dao.create(testDTO2);
-        dao.create(testDTO3);
         dao.create(testDTO4);
     }
 
     @Test
     void createDAOtest(){
+        assertEquals(dao.returnIds(dao.create(testDTO3)).get(0), 3L);
         assertEquals(4, dao.getAll().size());
     }
 
@@ -62,7 +62,6 @@ public class TestOrderDetailDAO {
         List<OrderDetailDTO> resultData = dao.getAll();
         testData.add(testDTO1);
         testData.add(testDTO2);
-        testData.add(testDTO3);
         testData.add(testDTO4);
 
         for (int i = 0; i<testData.size();i++)
@@ -71,8 +70,8 @@ public class TestOrderDetailDAO {
 
     @Test
     public void findByIdDAOtest(){
-        OrderDetailDTO testDTO = dao.findById(testDTO3.getId());
-        isEqual(testDTO3, testDTO);
+        OrderDetailDTO testDTO = dao.findById(testDTO2.getId());
+        isEqual(testDTO2, testDTO);
     }
 
     @Test
