@@ -4,7 +4,6 @@ import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.enums.OrderStatus;
 import org.nikita.jdbctask.interfaces.DTOmapper;
-import org.postgresql.util.PGmoney;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,10 +18,7 @@ public class OrderDetailDTOMapper implements DTOmapper<OrderDetailDTO> {
                     OrderStatus.valueOf(resultSet.getString("oderStatus")),
                     new ProductDAO()
                             .getMultiple((List<Long>) resultSet.getArray("products")),
-                    new PGmoney(resultSet
-                            .getString("totalAmount")
-                            .substring(2)
-                            .replace(",", ""))
+                    resultSet.getBigDecimal("totalAmount")
             );
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
