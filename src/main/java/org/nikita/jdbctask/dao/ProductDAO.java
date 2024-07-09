@@ -27,10 +27,11 @@ public class ProductDAO implements DAO<ProductDTO> {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName +
                             "(name, price, quantity, available) " +
-                            "VALUES (?, "+ product.getPrice().val + ", ?, ?)");
+                            "VALUES (?, ?, ?, ?)");
             statement.setString(1, product.getName());
-            statement.setLong(2, product.getQuantity());
-            statement.setBoolean(3, product.getAvailability());
+            statement.setObject(2, product.getPrice());
+            statement.setLong(3, product.getQuantity());
+            statement.setBoolean(4, product.getAvailability());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
@@ -73,12 +74,13 @@ public class ProductDAO implements DAO<ProductDTO> {
         try {
             PreparedStatement statement = connection.prepareStatement(
                     "UPDATE " + tableName +
-                            " SET name = ?, price = "+product.getPrice().val + ", quantity = ?, available = ?" +
+                            " SET name = ?, price = ?, quantity = ?, available = ?" +
                             " WHERE id = ?");
             statement.setString(1, product.getName());
-            statement.setLong(2, product.getQuantity());
-            statement.setBoolean(3, product.getAvailability());
-            statement.setLong(4, product.getId());
+            statement.setObject(2, product.getPrice());
+            statement.setLong(3, product.getQuantity());
+            statement.setBoolean(4, product.getAvailability());
+            statement.setLong(5, product.getId());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }

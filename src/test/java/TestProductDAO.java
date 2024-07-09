@@ -10,10 +10,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestProductDAO {
     static Connection connection = TestDatabaseConfig.getConnection();
@@ -68,14 +66,14 @@ public class TestProductDAO {
         testData.add(testDTO4);
 
         for (int i = 0; i<testData.size();i++)
-            assertTrue (isEqual(testData.get(i), resultData.get(i)));
+            isEqual(testData.get(i), resultData.get(i));
     }
 
     @Test
     public void findByIdProductDAOtest(){
         System.out.println(productDAO.getAll());
         ProductDTO testDTO = productDAO.findById(testDTO3.getId());
-        assertTrue(isEqual(testDTO3, testDTO));
+        isEqual(testDTO3, testDTO);
     }
 
     @Test
@@ -85,11 +83,11 @@ public class TestProductDAO {
         assertEquals(currentSize - 1, productDAO.getAll().size());
     }
 
-    private boolean isEqual(ProductDTO dto1, ProductDTO dto2){
-        if(dto1.getId() != dto2.getId()) return false;
-        if(!Objects.equals(dto1.getName(), dto2.getName())) return false;
-        if(dto1.getPrice().val != dto2.getPrice().val) return false;
-        if(dto1.getQuantity() != dto2.getQuantity()) return false;
-        return dto1.getAvailability() == dto2.getAvailability();
+    private void isEqual(ProductDTO dto1, ProductDTO dto2){
+        assertEquals(dto1.getId(), dto2.getId());
+        assertEquals(dto1.getName(), dto2.getName());
+        assertEquals(dto1.getPrice(), dto2.getPrice());
+        assertEquals(dto1.getQuantity(), dto2.getQuantity());
+        assertEquals(dto1.getAvailability(),dto2.getAvailability());
     }
 }
