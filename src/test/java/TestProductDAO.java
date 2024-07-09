@@ -4,14 +4,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
-import org.nikita.jdbctask.mapper.dto.ProductDTOMapper;
 import org.postgresql.util.PGmoney;
 import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,7 +31,7 @@ public class TestProductDAO {
     @BeforeAll
     static void beforeAll() {
         postgreSQLTestContainer.start();
-        TestDatabaseConfig.recreateProductsTable();
+        recreateProductDAO();
     }
 
     @AfterAll
@@ -44,8 +40,12 @@ public class TestProductDAO {
     }
 
     @AfterEach
-    void recreateProductDAO(){
-        TestDatabaseConfig.recreateProductsTable();
+    void afterEach(){
+        recreateProductDAO();
+    }
+
+    static void recreateProductDAO(){
+        TestDatabaseConfig.recreateProductsTable(connection);
         productDAO.create(testDTO1);
         productDAO.create(testDTO2);
         productDAO.create(testDTO3);
@@ -72,9 +72,16 @@ public class TestProductDAO {
     }
 
     @Test
+    public void findByIdProductDAOtest(){
+        System.out.println(productDAO.getAll());
+        ProductDTO testDTO = productDAO.findById(testDTO3.getId());
+        assertTrue(isEqual(testDTO3, testDTO));
+    }
+
+    @Test
     public void deleteProductDAOtest(){
         int currentSize = productDAO.getAll().size();
-        productDAO.delete(2L);
+        productDAO.delete(1L);
         assertEquals(currentSize - 1, productDAO.getAll().size());
     }
 
@@ -83,32 +90,6 @@ public class TestProductDAO {
         if(!Objects.equals(dto1.getName(), dto2.getName())) return false;
         if(dto1.getPrice().val != dto2.getPrice().val) return false;
         if(dto1.getQuantity() != dto2.getQuantity()) return false;
-        if(dto1.getAvailability() != dto2.getAvailability()) return false;
-        return true;
-    }
-
-    @Test
-    public void findByIdProductDAOtest(){
-        //ProductDTO testDTO = productDAO.findById(testDTO3.getId());
-        List<ProductDTO> testDTO = testFindByIdSimplified(testDTO3.getId());
-        assertEquals(1, testDTO.size());
-    }
-
-    public List<ProductDTO> testFindByIdSimplified(long id) {
-        try {
-            PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM public.product WHERE id=?;");
-            statement.setLong(1, id);
-            System.out.println(statement);
-            ResultSet resultSet = statement.executeQuery();
-
-            return new ProductDTOMapper().listFromResult(resultSet);
-
-        } catch (
-                SQLException e) {
-            System.out.println(
-                    "SQLException: " + e.getMessage());
-        }
-        return null;
+        return dto1.getAvailability() == dto2.getAvailability();
     }
 }

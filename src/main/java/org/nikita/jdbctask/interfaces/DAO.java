@@ -1,17 +1,14 @@
 package org.nikita.jdbctask.interfaces;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 public interface DAO<T> {
     default ResultSet defaultFindById(Connection connection, String tableName, Long id){
         try {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id = " + id);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?");
+            statement.setLong(1, id);
+            return statement.executeQuery();
         }
         catch (SQLException e) {
             System.out.println(
@@ -22,9 +19,8 @@ public interface DAO<T> {
 
     default ResultSet defaultGetAll(Connection connection, String tableName){
         try {
-            Statement statement = connection.createStatement();
-            return statement.executeQuery(
-                    "SELECT * FROM " + tableName);
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName);
+            return statement.executeQuery();
         }
         catch (SQLException e) {
             System.out.println(

@@ -37,9 +37,9 @@ public class TestDatabaseConfig {
         }
     }
 
-    public static void recreateProductsTable(){
+    public static void recreateProductsTable(Connection connection){
         try {
-            getConnection().prepareStatement(
+            connection.prepareStatement(
                     "DROP TABLE IF EXISTS public.\"product\";\n" +
                             "CREATE TABLE IF NOT EXISTS public.\"product\"\n" +
                             "(\n" +
