@@ -1,23 +1,23 @@
 package org.nikita.jdbctask.entity;
 
 import org.nikita.jdbctask.enums.OrderStatus;
-import org.postgresql.util.PGmoney;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderDetail {
     private long id;
     private OrderStatus orderStatus;
     private List<Product> products;
-    private PGmoney totalAmount;
+    private BigDecimal totalAmount;
 
-    public OrderDetail(OrderStatus orderStatus, List<Product> products, PGmoney totalAmount){
+    public OrderDetail(OrderStatus orderStatus, List<Product> products, BigDecimal totalAmount){
         this.orderStatus = orderStatus;
         this.products = products;
         this.totalAmount = totalAmount;
     }
 
-    public OrderDetail(Long id, OrderStatus orderStatus, List<Product> products, PGmoney totalAmount){
+    public OrderDetail(Long id, OrderStatus orderStatus, List<Product> products, BigDecimal totalAmount){
         this(orderStatus, products, totalAmount);
         this.id = id;
     }
@@ -46,11 +46,11 @@ public class OrderDetail {
         this.products = products;
     }
 
-    public PGmoney getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(PGmoney totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 }

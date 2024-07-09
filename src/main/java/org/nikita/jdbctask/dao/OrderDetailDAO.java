@@ -29,8 +29,9 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO " + tableName +
                             "(\"orderStatus\", \"totalAmount\") " +
-                            "VALUES (?, " + orderDetail.getTotalAmount().val + ")");
+                            "VALUES (?, ?)");
             statement.setString(1, orderDetail.getOrderStatus().name());
+            statement.setBigDecimal(2, orderDetail.getTotalAmount());
 
             if (statement.executeUpdate()!=1) throw new SQLException();
         }
