@@ -9,7 +9,7 @@ import java.sql.Connection;
 import java.util.List;
 
 public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
-    private final String tableName = "public.orderApproval";
+    private final String tableName = "public.\"orderApproval\"";
     private final OrderApprovalDTOMapper mapper = new OrderApprovalDTOMapper();
     private final Connection connection;
 
