@@ -30,8 +30,8 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
             PreparedStatement insertDetailsStatement = connection.prepareStatement(
                     "INSERT INTO public.\"orderDetail\"(\n" +
                             "id, \"totalAmount\", \"orderStatus\")\n" +
-                            "output Inserted.id\n" +
-                            "VALUES (?, ?, ?);");
+                            "VALUES (?, ?, ?)\n" +
+                            "RETURNING id;");
             insertDetailsStatement.setLong(1, orderDetail.getId());
             insertDetailsStatement.setBigDecimal(2, orderDetail.getTotalAmount());
             insertDetailsStatement.setString(3, orderDetail.getOrderStatus().name());

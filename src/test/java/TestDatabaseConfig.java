@@ -55,4 +55,21 @@ public class TestDatabaseConfig {
             throw new RuntimeException(e);
         }
     }
+
+    public static void recreateOrderDetailTable(Connection connection){
+        try {
+            connection.prepareStatement(
+                    "DROP TABLE IF EXISTS public.\"orderDetail\";\n" +
+                            "CREATE TABLE IF NOT EXISTS public.\"orderDetail\"\n" +
+                            "(\n" +
+                            "    id serial NOT NULL,\n" +
+                            "    \"totalAmount\" numeric NOT NULL,\n" +
+                            "    \"orderStatus\" character varying(32) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
+                            "    CONSTRAINT \"orderDetail_pkey\" PRIMARY KEY (id)\n" +
+                            ")").execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

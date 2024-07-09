@@ -29,7 +29,7 @@ public class TestProductDAO {
     @BeforeAll
     static void beforeAll() {
         postgreSQLTestContainer.start();
-        recreateProductDAO();
+        recreateDAO();
     }
 
     @AfterAll
@@ -39,10 +39,10 @@ public class TestProductDAO {
 
     @AfterEach
     void afterEach(){
-        recreateProductDAO();
+        recreateDAO();
     }
 
-    static void recreateProductDAO(){
+    static void recreateDAO(){
         TestDatabaseConfig.recreateProductsTable(connection);
         productDAO.create(testDTO1);
         productDAO.create(testDTO2);
@@ -51,12 +51,12 @@ public class TestProductDAO {
     }
 
     @Test
-    void createProductDAOtest(){
+    void createDAOtest(){
         assertEquals(4, productDAO.getAll().size());
     }
 
     @Test
-    public void getAllProductDAOtest(){
+    public void getAllDAOtest(){
         List<ProductDTO> testData = new ArrayList<>();
         List<ProductDTO> resultData = productDAO.getAll();
         System.out.println(resultData);
@@ -70,14 +70,28 @@ public class TestProductDAO {
     }
 
     @Test
-    public void findByIdProductDAOtest(){
-        System.out.println(productDAO.getAll());
+    public void findByIdDAOtest(){
         ProductDTO testDTO = productDAO.findById(testDTO3.getId());
         isEqual(testDTO3, testDTO);
     }
 
     @Test
-    public void deleteProductDAOtest(){
+    public void getMultipleDAOtest(){
+        List<ProductDTO> testData = new ArrayList<>();
+        testData.add(testDTO2);
+        testData.add(testDTO3);
+        List<Long> idArray = new ArrayList<>();
+        idArray.add(testDTO2.getId());
+        idArray.add(testDTO3.getId());
+
+        List<ProductDTO> resultData = productDAO.getMultiple(idArray);
+
+        for (int i = 0; i<testData.size();i++)
+            isEqual(testData.get(i), resultData.get(i));
+    }
+
+    @Test
+    public void deleteDAOtest(){
         int currentSize = productDAO.getAll().size();
         productDAO.delete(1L);
         assertEquals(currentSize - 1, productDAO.getAll().size());

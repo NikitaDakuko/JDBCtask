@@ -58,11 +58,12 @@ public class ProductDAO implements DAO<ProductDTO> {
 
     public List<ProductDTO> getMultiple(List<Long> ids){
         try {
-            Statement statement = connection.createStatement();
             String idString = ids.toString().replace("[", "(").replace("]", ")");
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id IN " + idString);
+            // idArray = connection.createArrayOf("INTEGER", ids.toArray());
+            //statement.setArray(1, idArray);
 
-            return mapper.listFromResult(statement.executeQuery(
-                    "SELECT * FROM " + tableName + " WHERE id IN (" + idString + ")"));
+            return mapper.listFromResult(statement.executeQuery());
         }
         catch (SQLException e) {
             System.out.println(
