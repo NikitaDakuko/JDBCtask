@@ -4,14 +4,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class OrderProductDTO implements Serializable {
-    private long id;
     private final long orderDetailId;
     private final List<Long> productIds;
-
-    public OrderProductDTO(long id, long orderDetailId, List<Long> productIds){
-        this(orderDetailId, productIds);
-        this.id = id;
-    }
 
     public OrderProductDTO(long orderDetailId, List<Long> productIds){
         this.orderDetailId = orderDetailId;
@@ -26,13 +20,8 @@ public class OrderProductDTO implements Serializable {
         }
 
         return "OrderProduct:{"+
-                " id: " + id +
                 ", orderDetailId: " + orderDetailId +
                 ", products: " + productString + "}";
-    }
-
-    public long getId() {
-        return id;
     }
 
     public long getOrderDetailId() {

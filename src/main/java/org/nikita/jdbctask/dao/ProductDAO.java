@@ -45,10 +45,7 @@ public class ProductDAO implements DAO<ProductDTO> {
     @Override
     public ProductDTO findById(Long id) {
         List<ProductDTO> results = mapper.listFromResult(defaultFindById(connection, tableName ,id));
-        if(!results.isEmpty())
-            return results.get(0);
-        System.out.println("querry is empty!?!?!!?");
-        return null;
+        return results.get(0);
     }
 
     @Override

@@ -54,7 +54,18 @@ public class OrderProductDAO implements DAO<OrderProductDTO> {
     }
 
     @Override
-    public OrderProductDTO findById(Long orderId) { return null; }
+    public OrderProductDTO findById(Long orderId) {
+        try {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE orderId = ?");
+            statement.setLong(1, orderId);
+            return mapper.fromResult(statement.executeQuery());
+        }
+        catch (SQLException e) {
+            System.out.println(
+                    "Could not find products for orderId= " + orderId + ", SQLException: "+ e.getMessage());
+        }
+        return null;
+    }
 
     @Override
     public List<OrderProductDTO> getAll() {

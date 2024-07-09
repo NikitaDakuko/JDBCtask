@@ -13,17 +13,16 @@ public class OrderProductDTOMapper implements DTOmapper<OrderProductDTO> {
     public OrderProductDTO fromResult(ResultSet resultSet) {
         try {
             List<Long> products = new ArrayList<>();
-            long id, orderId;
+            long orderId;
 
             if (resultSet.next()){
-                id = resultSet.getLong("id");
                 orderId = resultSet.getLong("orderId");
                 products.add(resultSet.getLong("productId"));
 
                 while (resultSet.next())
                     products.add(resultSet.getLong("productId"));
 
-                return new OrderProductDTO(id, orderId, products);
+                return new OrderProductDTO(orderId, products);
             }
             throw new SQLException();
 
