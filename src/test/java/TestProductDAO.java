@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
-import org.postgresql.util.PGmoney;
 import org.testcontainers.containers.PostgreSQLContainer;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +17,10 @@ public class TestProductDAO {
     static Connection connection = TestDatabaseConfig.getConnection();
     static ProductDAO productDAO = new ProductDAO(connection);
 
-    static ProductDTO testDTO1 = new ProductDTO(1L,"test product", new PGmoney(2), 1, true);
-    static ProductDTO testDTO2 = new ProductDTO(2L,"test product2", new PGmoney(1), 2, false);
-    static ProductDTO testDTO3 = new ProductDTO(3L,"test product3", new PGmoney(1984), 50, false);
-    static ProductDTO testDTO4 = new ProductDTO(4L,"test product4", new PGmoney(20), 900, true);
+    static ProductDTO testDTO1 = new ProductDTO(1L,"test product", BigDecimal.valueOf(2D), 1, true);
+    static ProductDTO testDTO2 = new ProductDTO(2L,"test product2", BigDecimal.valueOf(1D), 2, false);
+    static ProductDTO testDTO3 = new ProductDTO(3L,"test product3", BigDecimal.valueOf(1984D), 50, false);
+    static ProductDTO testDTO4 = new ProductDTO(4L,"test product4", BigDecimal.valueOf(20D), 900, true);
 
     static PostgreSQLContainer postgreSQLTestContainer = new PostgreSQLContainer<>(
             "postgres:16-alpine"

@@ -1,20 +1,20 @@
 package org.nikita.jdbctask.entity;
 
-import org.postgresql.util.PGmoney;
+import java.math.BigDecimal;
 
 public class Product{
     private Long id;
     private String name;
-    private PGmoney price;
+    private BigDecimal price;
     private int quantity;
     private boolean available;
 
-    public Product(Long id, String name, PGmoney price, int quantity, boolean available){
+    public Product(Long id, String name, BigDecimal price, int quantity, boolean available){
         this(name, price, quantity, available);
         this.id = id;
     }
 
-    public Product(String name, PGmoney price, int quantity, boolean available) {
+    public Product(String name, BigDecimal price, int quantity, boolean available) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -33,11 +33,11 @@ public class Product{
         this.name = name;
     }
 
-    public PGmoney getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(PGmoney price){
+    public void setPrice(BigDecimal price){
         this.price = price;
     }
 

@@ -7,9 +7,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
-import org.postgresql.util.PGmoney;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 @WebServlet("/editProduct")
 public class EditProductServlet extends HttpServlet {
@@ -27,7 +27,7 @@ public class EditProductServlet extends HttpServlet {
         ProductDTO p = new ProductDTO(
                 this.id,
                 req.getParameter("productName"),
-                new PGmoney(Integer.parseInt(req.getParameter("productPrice"))),
+                new BigDecimal(req.getParameter("productPrice")),
                 Integer.parseInt(req.getParameter("productQuantity")),
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 

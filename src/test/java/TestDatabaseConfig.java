@@ -45,7 +45,7 @@ public class TestDatabaseConfig {
                             "(\n" +
                             "    id serial NOT NULL,\n" +
                             "    name character varying(255) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
-                            "    price money NOT NULL,\n" +
+                            "    price numeric NOT NULL,\n" +
                             "    quantity integer NOT NULL,\n" +
                             "    available boolean NOT NULL,\n" +
                             "    PRIMARY KEY (id)" +

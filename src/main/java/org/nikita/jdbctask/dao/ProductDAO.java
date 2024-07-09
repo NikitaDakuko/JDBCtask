@@ -29,7 +29,7 @@ public class ProductDAO implements DAO<ProductDTO> {
                             "(name, price, quantity, available) " +
                             "VALUES (?, ?, ?, ?)");
             statement.setString(1, product.getName());
-            statement.setObject(2, product.getPrice());
+            statement.setBigDecimal(2, product.getPrice());
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
 
@@ -77,7 +77,7 @@ public class ProductDAO implements DAO<ProductDTO> {
                             " SET name = ?, price = ?, quantity = ?, available = ?" +
                             " WHERE id = ?");
             statement.setString(1, product.getName());
-            statement.setObject(2, product.getPrice());
+            statement.setBigDecimal(2, product.getPrice());
             statement.setLong(3, product.getQuantity());
             statement.setBoolean(4, product.getAvailability());
             statement.setLong(5, product.getId());

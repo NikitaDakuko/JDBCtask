@@ -1,22 +1,21 @@
 package org.nikita.jdbctask.dto;
 
-import org.postgresql.util.PGmoney;
-
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class ProductDTO implements Serializable {
     private Long id;
     private final String name;
-    private final PGmoney price;
+    private final BigDecimal price;
     private final int quantity;
     private final boolean available;
 
-    public ProductDTO(Long id, String name, PGmoney price, int quantity, boolean available) {
+    public ProductDTO(Long id, String name, BigDecimal price, int quantity, boolean available) {
         this(name, price, quantity, available);
         this.id = id;
     }
 
-    public ProductDTO(String name, PGmoney price, int quantity, boolean available) {
+    public ProductDTO(String name, BigDecimal price, int quantity, boolean available) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -41,7 +40,7 @@ public class ProductDTO implements Serializable {
         return name;
     }
 
-    public PGmoney getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 

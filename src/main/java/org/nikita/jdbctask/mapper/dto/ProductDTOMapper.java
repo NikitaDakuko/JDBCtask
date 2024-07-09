@@ -3,7 +3,6 @@ package org.nikita.jdbctask.mapper.dto;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DTOmapper;
-import org.postgresql.util.PGmoney;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,9 +17,7 @@ public class ProductDTOMapper implements DTOmapper<ProductDTO> {
                 return new ProductDTO(
                         resultSet.getLong("id"),
                         resultSet.getString("name"),
-                        new PGmoney(resultSet
-                                .getString("price")
-                                .replace(",", "")),
+                        resultSet.getBigDecimal("price"),
                         resultSet.getInt("quantity"),
                         resultSet.getBoolean("available")
                 );
