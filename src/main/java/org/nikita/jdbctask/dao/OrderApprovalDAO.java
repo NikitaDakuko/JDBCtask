@@ -53,12 +53,35 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public OrderApprovalDTO findById(Long id) throws SQLException {
-        return mapper.fromResult(defaultFindById(connection, DatabaseConfig.orderApprovalTableName, id));
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT oa.id, oa.\"orderDetailId\", od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                        " FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
+                        "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
+                        "ON od.id = oa.\"orderDetailId\"" +
+                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                        "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
+                        "WHERE oa.id = ?\n" +
+                        "GROUP by oa.\"orderDetailId\";"
+        );
+        statement.setLong(1, id);
+        List<OrderApprovalDTO> dtos = mapper.listFromResult(statement.executeQuery());
+        if (dtos.isEmpty())
+            throw new SQLException("There are no order approvals with ID =" + id);
+        return dtos.get(0);
     }
 
     @Override
     public List<OrderApprovalDTO> getAll() throws SQLException {
-        return mapper.listFromResult(defaultGetAll(connection, DatabaseConfig.orderApprovalTableName));
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT oa.id, oa.\"orderDetailId\", od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                        " FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
+                        "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
+                        "ON od.id = oa.\"orderDetailId\"" +
+                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                        "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
+                        "GROUP by oa.\"orderDetailId\";"
+        );
+        return mapper.listFromResult(statement.executeQuery());
     }
 
     @Override
