@@ -84,11 +84,11 @@ public class TestProductDAO {
     @Test
     public void getMultipleDAOtest() throws SQLException {
         List<ProductDTO> testData = new ArrayList<>();
+        testData.add(testDTO1);
         testData.add(testDTO2);
-        testData.add(testDTO3);
         List<Long> idArray = new ArrayList<>();
-        idArray.add(testDTO2.getId());
-        idArray.add(testDTO3.getId());
+        for(ProductDTO p : testData)
+            idArray.add(p.getId());
 
         List<ProductDTO> resultData = productDAO.getMultiple(idArray);
 

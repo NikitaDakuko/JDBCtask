@@ -12,29 +12,29 @@ public class OrderDetailDTO implements Serializable {
     private final List<ProductDTO> products;
     private final BigDecimal totalAmount;
 
-    public OrderDetailDTO(OrderStatus orderStatus, List<ProductDTO> products, BigDecimal totalAmount){
+    public OrderDetailDTO(OrderStatus orderStatus, List<ProductDTO> products, BigDecimal totalAmount) {
         this.orderStatus = orderStatus;
         this.products = products;
         this.totalAmount = totalAmount;
     }
 
-    public OrderDetailDTO(Long id, OrderStatus orderStatus, List<ProductDTO> products, BigDecimal totalAmount){
+    public OrderDetailDTO(Long id, OrderStatus orderStatus, List<ProductDTO> products, BigDecimal totalAmount) {
         this(orderStatus, products, totalAmount);
         this.id = id;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         StringBuilder productString = new StringBuilder();
         for (ProductDTO product : products) {
-            productString.append(product.toString()).append(" ");
+            productString.append(product.getId()).append(" ");
         }
 
-        return "OrderDetail:{"+
-                " id: " + id +
-                ", orderStatus: " + orderStatus +
-                ", products: " + productString +
-                ", totalAmount: " + totalAmount.toString();
+        return "OrderDetail:{" +
+                "\n\tid: " + id +
+                ",\n\torderStatus: " + orderStatus +
+                ",\n\tproducts: " + productString +
+                ",\n\ttotalAmount: " + totalAmount.toString() + "\n} ";
     }
 
     public long getId() {

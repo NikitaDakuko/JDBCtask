@@ -25,20 +25,11 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
 
     @Override
     public List<Long> create(List<OrderDetailDTO> orderDetails) throws SQLException {
-
         PreparedStatement insertDetailsStatement = connection.prepareStatement(
-                "INSERT INTO " + DatabaseConfig.orderDetailTableName + "(\n" +
-                        "id, \"totalAmount\", \"orderStatus\")\n" +
-                        "VALUES (?, ?, ?)\n" +
-                        "RETURNING id;");
-        for (OrderDetailDTO orderDetail : orderDetails) {
-            insertDetailsStatement.setLong(1, orderDetail.getId());
-            insertDetailsStatement.setBigDecimal(2, orderDetail.getTotalAmount());
-            insertDetailsStatement.setString(3, orderDetail.getOrderStatus().name());
-            insertDetailsStatement.addBatch();
-        }
+                insertStringBuilder(orderDetails).toString());
 
         List<Long> ids = returnId(insertDetailsStatement.executeQuery());
+
         if (ids.size() == orderDetails.size()) {
             PreparedStatement orderProductStatement = connection.prepareStatement(
                     "INSERT INTO " + DatabaseConfig.orderProductTableName + "(\n" +
@@ -52,6 +43,7 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
                     orderProductStatement.setLong(2, p.getId());
                     orderProductStatement.addBatch();
                 }
+                orderProductStatement.executeBatch();
             }
         } else throw new SQLException("Couldn't insert all order details");
 
@@ -60,18 +52,29 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
 
     @Override
     public OrderDetailDTO findById(Long id) throws SQLException {
-        return mapper.listFromResult(defaultFindById(connection, DatabaseConfig.orderDetailTableName, id)).get(0);
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                        " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
+                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                        "ON od.id = op.\"orderDetailId\"\n" +
+                        "WHERE od.id = ?\n" +
+                        "GROUP by od.id;"
+        );
+        statement.setLong(1, id);
+        List<OrderDetailDTO> dtos = mapper.listFromResult(statement.executeQuery());
+        if (dtos.isEmpty())
+            throw new SQLException("There are no order details with ID =" + id);
+        return dtos.get(0);
     }
 
     @Override
     public List<OrderDetailDTO> getAll() throws SQLException {
-
         PreparedStatement statement = connection.prepareStatement(
-                "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\")" +
+                "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
                         " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
                         "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
                         "ON od.id = op.\"orderDetailId\"\n" +
-                        "GROUP by od.id"
+                        "GROUP by od.id;"
         );
         return mapper.listFromResult(statement.executeQuery());
     }
@@ -82,6 +85,28 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
 
     @Override
     public void delete(Long id) throws SQLException {
+        if (connection.createStatement().executeUpdate(
+                "DELETE FROM " + DatabaseConfig.orderProductTableName +
+                        " WHERE \"orderDetailId\"=" + id) != 1) throw new SQLException();
+
         defaultDelete(connection, DatabaseConfig.orderDetailTableName, id);
     }
+
+    private static StringBuilder insertStringBuilder(List<OrderDetailDTO> orderDetails) {
+        StringBuilder insertDetailsQuerry = new StringBuilder(
+                "INSERT INTO " + DatabaseConfig.orderDetailTableName +
+                        "(\"totalAmount\", \"orderStatus\") VALUES\n");
+
+        for (OrderDetailDTO orderDetail : orderDetails) {
+            insertDetailsQuerry
+                    .append("((")
+                    .append(orderDetail.getTotalAmount())
+                    .append("::numeric), ('")
+                    .append(orderDetail.getOrderStatus().name())
+                    .append("')),\n");
+        }
+        insertDetailsQuerry.replace(insertDetailsQuerry.length() - 2, insertDetailsQuerry.length(), "\nRETURNING id;");
+        return insertDetailsQuerry;
+    }
+
 }

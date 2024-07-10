@@ -25,11 +25,11 @@ public class ProductDTO implements Serializable {
     @Override
     public String toString() {
         return "Product{" +
-                " id=" + id +
-                ", name=" + name +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                ", available=" + available + "} ";
+                "\n\tid=" + id +
+                ",\n\tname=" + name +
+                ",\n\tprice=" + price +
+                ",\n\tquantity=" + quantity +
+                ",\n\tavailable=" + available + "\n} ";
     }
 
     public long getId() {

@@ -7,18 +7,18 @@ import org.nikita.jdbctask.interfaces.DTOmapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class OrderDetailDTOMapper implements DTOmapper<OrderDetailDTO> {
     @Override
     public OrderDetailDTO fromResult(ResultSet resultSet) {
         try {
-            System.out.println("array_agg= " + resultSet.getArray("array_agg"));
             return new OrderDetailDTO(
                     resultSet.getLong("id"),
                     OrderStatus.valueOf(resultSet.getString("orderStatus")),
                     new ProductDAO().getMultiple(
-                            (List<Long>) resultSet.getArray("array_agg")),
+                            new ArrayList<>(Arrays.asList((Long[]) resultSet.getArray("productIds").getArray()))),
                     resultSet.getBigDecimal("totalAmount")
             );
         } catch (SQLException e) {

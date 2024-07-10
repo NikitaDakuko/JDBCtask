@@ -54,8 +54,6 @@ public class ProductDAO implements DAO<ProductDTO> {
         String idString = ids.toString().replace("[", "(").replace("]", ")");
         PreparedStatement statement = connection.prepareStatement(
                 "SELECT * FROM " + DatabaseConfig.productTableName + " WHERE id IN " + idString);
-        // idArray = connection.createArrayOf("INTEGER", ids.toArray());
-        //statement.setArray(1, idArray);
 
         return mapper.listFromResult(statement.executeQuery());
 
