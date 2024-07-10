@@ -7,9 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderApprovalDAO;
 import org.nikita.jdbctask.dao.ProductDAO;
-import org.nikita.jdbctask.dto.OrderApprovalDTO;
-import org.nikita.jdbctask.dto.OrderDetailDTO;
-import org.nikita.jdbctask.dto.ProductDTO;
+import org.nikita.jdbctask.dto.*;
 import org.nikita.jdbctask.enums.OrderStatus;
 
 import java.io.IOException;
@@ -32,7 +30,7 @@ public class CreateOrderApprovalServlet extends HttpServlet {
             OrderApprovalDTO p = new OrderApprovalDTO(
                     new OrderDetailDTO(
                             OrderStatus.valueOf(req.getParameter("orderStatus")),
-                            createDummies(req.getParameter("products")),
+                            getProducts(req.getParameter("products")),
                             new BigDecimal(req.getParameter("totalAmount")))
             );
 
@@ -43,17 +41,11 @@ public class CreateOrderApprovalServlet extends HttpServlet {
         }
     }
 
-    private List<ProductDTO> createDummies(String productsString) throws SQLException {
+    private List<ProductDTO> getProducts(String productsString) throws SQLException {
         List<Long> ids = new ArrayList<>();
         for (String s:productsString.replaceAll("\\s+","").split(",")){
             ids.add(Long.parseLong(s));
         }
-
-//        List<ProductDTO> dummies = new ArrayList<>();
-//        for(Long id: ids)
-//            dummies.add(new ProductDTO(id, "", null, 0, false));
-//        return dummies;
-
         return new ProductDAO().getMultiple(ids);
     }
 }

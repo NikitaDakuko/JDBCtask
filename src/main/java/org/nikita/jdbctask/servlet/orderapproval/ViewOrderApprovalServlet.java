@@ -23,13 +23,12 @@ public class ViewOrderApprovalServlet extends HttpServlet {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
             orderApprovals.add(db.findById(id));
-        } catch (Exception e) {
-            try {
-                orderApprovals = db.getAll();
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-        }
+        } catch (SQLException ignored) {}
+
+        try {
+            orderApprovals = db.getAll();
+        } catch (SQLException ignored) {}
+
         resp.getOutputStream().println(orderApprovals.toString());
     }
 }
