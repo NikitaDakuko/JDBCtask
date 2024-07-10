@@ -57,12 +57,12 @@ public class TestProductDAO {
     }
 
     @Test
-    void createDAOtest() throws SQLException {
+    void createDAOtest() {
         assertEquals(4, productDAO.getAll().size());
     }
 
     @Test
-    public void getAllDAOtest() throws SQLException {
+    public void getAllDAOtest() {
         List<ProductDTO> testData = new ArrayList<>();
         List<ProductDTO> resultData = productDAO.getAll();
         System.out.println(resultData);
@@ -76,13 +76,13 @@ public class TestProductDAO {
     }
 
     @Test
-    public void findByIdDAOtest() throws SQLException {
+    public void findByIdDAOtest() {
         ProductDTO testDTO = productDAO.findById(testDTO3.getId());
         isEqual(testDTO3, testDTO);
     }
 
     @Test
-    public void getMultipleDAOtest() throws SQLException {
+    public void getMultipleDAOtest() {
         List<ProductDTO> testData = new ArrayList<>();
         testData.add(testDTO1);
         testData.add(testDTO2);
@@ -97,7 +97,7 @@ public class TestProductDAO {
     }
 
     @Test
-    public void deleteDAOtest() throws SQLException {
+    public void deleteDAOtest() {
         int currentSize = productDAO.getAll().size();
         productDAO.delete(1L);
         assertEquals(currentSize - 1, productDAO.getAll().size());

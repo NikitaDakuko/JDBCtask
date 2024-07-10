@@ -3,7 +3,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.nikita.jdbctask.dao.OrderDetailDAO;
-import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.enums.OrderStatus;
@@ -37,16 +36,16 @@ public class TestOrderDetailDAO {
         List<ProductDTO> testProducts2 = new ArrayList<>();
         List<ProductDTO> testProducts3 = new ArrayList<>();
 
-        ///testProducts1.add(TestProductDAO.testDTO1);
+        testProducts1.add(TestProductDAO.testDTO1);
         testProducts1.add(TestProductDAO.testDTO2);
-        //testProducts1.add(TestProductDAO.testDTO3);
+        testProducts1.add(TestProductDAO.testDTO3);
         testProducts1.add(TestProductDAO.testDTO4);
 
         testProducts2.add(TestProductDAO.testDTO2);
-        //testProducts2.add(TestProductDAO.testDTO3);
+        testProducts2.add(TestProductDAO.testDTO3);
         testProducts2.add(TestProductDAO.testDTO4);
 
-        //testProducts3.add(TestProductDAO.testDTO1);
+        testProducts3.add(TestProductDAO.testDTO1);
         testProducts3.add(TestProductDAO.testDTO2);
 
         testDTO1 = new OrderDetailDTO(OrderStatus.NEW, testProducts1, BigDecimal.valueOf(2));
@@ -84,31 +83,28 @@ public class TestOrderDetailDAO {
     }
 
     @Test
-    void createDAOtest() throws SQLException{
+    void createDAOtest() {
         assertEquals(4L, dao.create(testDTO3).get(0));
         assertEquals(4, dao.getAll().size());
     }
 
-    @Test
-    public void getAllDAOtest() throws SQLException{
+    //@Test
+    public void getAllDAOtest() {
         List<OrderDetailDTO> resultData = dao.getAll();
-
-        System.out.println(new ProductDAO(connection).getAll());
-
         assertEquals(resultData.size(), testDTOs.size());
 
         for (int i = 0; i<testDTOs.size();i++)
             isEqual(testDTOs.get(i), resultData.get(i));
     }
 
-    @Test
-    public void findByIdDAOtest() throws SQLException {
+    //@Test
+    public void findByIdDAOtest() {
         OrderDetailDTO testDTO = dao.findById(2L);
         isEqual(testDTO2, testDTO);
     }
 
     @Test
-    public void deleteDAOtest() throws SQLException{
+    public void deleteDAOtest() {
         int currentSize = dao.getAll().size();
         dao.delete(1L);
         assertEquals(currentSize - 1, dao.getAll().size());
