@@ -12,7 +12,6 @@ import org.nikita.jdbctask.enums.OrderStatus;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 
 @WebServlet("/editOrderApproval")
 public class EditOrderApprovalServlet extends HttpServlet {
@@ -34,11 +33,7 @@ public class EditOrderApprovalServlet extends HttpServlet {
                         new BigDecimal(req.getParameter("totalAmount")))
         );
 
-        try {
-            new OrderApprovalDAO().update(p);
-            resp.getOutputStream().println(p.toString());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        new OrderApprovalDAO().update(p);
+        resp.getOutputStream().println(p.toString());
     }
 }

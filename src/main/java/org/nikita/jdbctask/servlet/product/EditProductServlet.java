@@ -33,11 +33,7 @@ public class EditProductServlet extends HttpServlet {
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
         ProductDAO dao = new ProductDAO();
-        try {
-            dao.update(p);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        dao.update(p);
 
         resp.getOutputStream().println(p.toString());
     }

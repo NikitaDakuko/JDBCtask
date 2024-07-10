@@ -21,9 +21,7 @@ public class ViewOrderApprovalServlet extends HttpServlet {
             resp.getOutputStream().println(db.findById(id).toString());
         } catch (Exception ignored) {}
 
-        try {
-            resp.getOutputStream().println(db.getAll().toString());
-        } catch (SQLException ignored) {}
+        resp.getOutputStream().println(db.getAll().toString());
 
 
     }

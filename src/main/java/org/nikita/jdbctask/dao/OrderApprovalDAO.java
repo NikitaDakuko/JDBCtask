@@ -28,68 +28,82 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     }
 
     @Override
-    public List<Long> create(List<OrderApprovalDTO> orderApprovals) throws SQLException {
-        List<OrderDetailDTO> orderDetailDTOS = new ArrayList<>();
-        for (OrderApprovalDTO orderApproval : orderApprovals)
-            orderDetailDTOS.add(orderApproval.getOrderDetail());
+    public List<Long> create(List<OrderApprovalDTO> orderApprovals) {
+        try {
+            List<OrderDetailDTO> orderDetailDTOS = new ArrayList<>();
+            for (OrderApprovalDTO orderApproval : orderApprovals)
+                orderDetailDTOS.add(orderApproval.getOrderDetail());
 
-        List<Long> insertedOrderDetailIds = orderDetailDAO.create(orderDetailDTOS);
+            List<Long> insertedOrderDetailIds = orderDetailDAO.create(orderDetailDTOS);
 
-        if (insertedOrderDetailIds.size() == orderApprovals.size()) {
-            PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO " + DatabaseConfig.orderApprovalTableName + "(\n" +
-                            "id, \"orderDetailId\")\n" +
-                            "VALUES (?, ?)");
+            if (insertedOrderDetailIds.size() == orderApprovals.size()) {
+                PreparedStatement statement = connection.prepareStatement(
+                        "INSERT INTO " + DatabaseConfig.orderApprovalTableName + "(\n" +
+                                "id, \"orderDetailId\")\n" +
+                                "VALUES (?, ?)");
 
-            for (int i = 0; i < orderApprovals.size(); i++) {
-                statement.setLong(1, orderApprovals.get(i).getId());
-                statement.setLong(2, insertedOrderDetailIds.get(i));
-                statement.addBatch();
+                for (int i = 0; i < orderApprovals.size(); i++) {
+                    statement.setLong(1, orderApprovals.get(i).getId());
+                    statement.setLong(2, insertedOrderDetailIds.get(i));
+                    statement.addBatch();
+                }
+                if (statement.executeUpdate() != 1) throw new SQLException();
             }
-            if (statement.executeUpdate() != 1) throw new SQLException();
-        } else throw new SQLException("Could not insert all order details");
+        } catch (SQLException e) {
+            System.out.println("Could not create order approval by ID, SQLException: " + e);
+        }
         return null;
     }
 
     @Override
-    public OrderApprovalDTO findById(Long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT oa.id, oa.\"orderDetailId\", od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
-                        " FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
-                        "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
-                        "ON od.id = oa.\"orderDetailId\"" +
-                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
-                        "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
-                        "WHERE oa.id = ?\n" +
-                        "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id;"
-        );
-        statement.setLong(1, id);
-        List<OrderApprovalDTO> dtos = mapper.listFromResult(statement.executeQuery());
-        if (dtos.isEmpty())
-            throw new SQLException("There are no order approvals with ID =" + id);
-        return dtos.get(0);
+    public OrderApprovalDTO findById(Long id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT oa.id, oa.\"orderDetailId\", od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                            " FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
+                            "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
+                            "ON od.id = oa.\"orderDetailId\"" +
+                            "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                            "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
+                            "WHERE oa.id = ?\n" +
+                            "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id;"
+            );
+            statement.setLong(1, id);
+            List<OrderApprovalDTO> dtos = mapper.listFromResult(statement.executeQuery());
+            if (dtos.isEmpty())
+                throw new SQLException("There are no order approvals with ID =" + id);
+            return dtos.get(0);
+        } catch (SQLException e) {
+            System.out.println("Could not get order approval by ID, SQLException: " + e);
+            return null;
+        }
     }
 
     @Override
-    public List<OrderApprovalDTO> getAll() throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT oa.id, oa.\"orderDetailId\", od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
-                        " FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
-                        "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
-                        "ON od.id = oa.\"orderDetailId\"" +
-                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
-                        "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
-                        "GROUP by oa.\"orderDetailId\";"
-        );
-        return mapper.listFromResult(statement.executeQuery());
+    public List<OrderApprovalDTO> getAll() {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT oa.id, oa.\"orderDetailId\", od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                            " FROM " + DatabaseConfig.orderApprovalTableName + " oa\n" +
+                            "JOIN " + DatabaseConfig.orderDetailTableName + " od\n" +
+                            "ON od.id = oa.\"orderDetailId\"" +
+                            "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                            "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
+                            "GROUP by oa.\"orderDetailId\";"
+            );
+            return mapper.listFromResult(statement.executeQuery());
+        } catch (SQLException e) {
+            System.out.println("Could not get order approvals, SQLException: " + e);
+            return null;
+        }
     }
 
     @Override
-    public void update(List<OrderApprovalDTO> orderApprovals) throws SQLException {
+    public void update(List<OrderApprovalDTO> orderApprovals) {
     }
 
     @Override
-    public void delete(Long id) throws SQLException {
+    public void delete(Long id) {
         defaultDelete(connection, DatabaseConfig.orderApprovalTableName, id);
     }
 }

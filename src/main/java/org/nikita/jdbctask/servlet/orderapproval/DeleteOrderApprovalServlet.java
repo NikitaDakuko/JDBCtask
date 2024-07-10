@@ -18,11 +18,7 @@ public class DeleteOrderApprovalServlet extends HttpServlet {
         Long id = Long.parseLong(req.getParameter("id"));
         OrderApprovalDAO orderApprovalDAO = new OrderApprovalDAO();
 
-        try {
-            orderApprovalDAO.delete(id);
-            req.getRequestDispatcher("/orderApprovals").forward(req, resp);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        orderApprovalDAO.delete(id);
+        req.getRequestDispatcher("/orderApprovals").forward(req, resp);
     }
 }

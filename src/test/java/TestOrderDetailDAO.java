@@ -110,13 +110,7 @@ public class TestOrderDetailDAO {
     @Test
     public void deleteDAOtest() throws SQLException{
         int currentSize = dao.getAll().size();
-
-        try {
-            dao.delete(1L);
-        } catch (SQLException e){
-            System.out.println("SQLException: " + e);
-        }
-
+        dao.delete(1L);
         assertEquals(currentSize - 1, dao.getAll().size());
     }
 

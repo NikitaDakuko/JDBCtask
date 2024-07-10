@@ -24,72 +24,90 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     }
 
     @Override
-    public List<Long> create(List<OrderDetailDTO> orderDetails) throws SQLException {
-        PreparedStatement insertDetailsStatement = connection.prepareStatement(
-                insertStringBuilder(orderDetails).toString());
+    public List<Long> create(List<OrderDetailDTO> orderDetails){
+        try {
+            PreparedStatement insertDetailsStatement = connection.prepareStatement(
+                    insertStringBuilder(orderDetails).toString());
 
-        List<Long> ids = returnId(insertDetailsStatement.executeQuery());
+            List<Long> ids = returnId(insertDetailsStatement.executeQuery());
 
-        if (ids.size() == orderDetails.size()) {
-            PreparedStatement orderProductStatement = connection.prepareStatement(
-                    "INSERT INTO " + DatabaseConfig.orderProductTableName + "(\n" +
-                            "\"orderDetailId\", \"productId\")\n" +
-                            "VALUES (?, ?);"
-            );
+            if (ids.size() == orderDetails.size()) {
+                PreparedStatement orderProductStatement = connection.prepareStatement(
+                        "INSERT INTO " + DatabaseConfig.orderProductTableName + "(\n" +
+                                "\"orderDetailId\", \"productId\")\n" +
+                                "VALUES (?, ?);"
+                );
 
-            for (int i = 0; i < orderDetails.size(); i++) {
-                for (ProductDTO p : orderDetails.get(i).getProducts()) {
-                    orderProductStatement.setLong(1, ids.get(i));
-                    orderProductStatement.setLong(2, p.getId());
-                    orderProductStatement.addBatch();
+                for (int i = 0; i < orderDetails.size(); i++) {
+                    for (ProductDTO p : orderDetails.get(i).getProducts()) {
+                        orderProductStatement.setLong(1, ids.get(i));
+                        orderProductStatement.setLong(2, p.getId());
+                        orderProductStatement.addBatch();
+                    }
+                    orderProductStatement.executeBatch();
                 }
-                orderProductStatement.executeBatch();
+                return ids;
             }
-        } else throw new SQLException("Couldn't insert all order details");
-
-        return ids;
+        }catch (SQLException e){
+            System.out.println("Could not create order details, SQLException: " + e);
+        }
+        return null;
     }
 
     @Override
-    public OrderDetailDTO findById(Long id) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
-                        " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
-                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
-                        "ON od.id = op.\"orderDetailId\"\n" +
-                        "WHERE od.id = ?\n" +
-                        "GROUP by od.id;"
-        );
-        statement.setLong(1, id);
-        List<OrderDetailDTO> dtos = mapper.listFromResult(statement.executeQuery());
-        if (dtos.isEmpty())
-            throw new SQLException("There are no order details with ID =" + id);
-        return dtos.get(0);
+    public OrderDetailDTO findById(Long id) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                            " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
+                            "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                            "ON od.id = op.\"orderDetailId\"\n" +
+                            "WHERE od.id = ?\n" +
+                            "GROUP by od.id;"
+            );
+            statement.setLong(1, id);
+            List<OrderDetailDTO> dtos = mapper.listFromResult(statement.executeQuery());
+            if (dtos.isEmpty())
+                throw new SQLException("There are no order details with ID =" + id);
+            return dtos.get(0);
+        }catch (SQLException e){
+            System.out.println("Could not find order details by ID, SQLException: " + e);
+            return null;
+        }
     }
 
     @Override
-    public List<OrderDetailDTO> getAll() throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
-                        " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
-                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
-                        "ON od.id = op.\"orderDetailId\"\n" +
-                        "GROUP by od.id;"
-        );
-        return mapper.listFromResult(statement.executeQuery());
+    public List<OrderDetailDTO> getAll(){
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\") \"productIds\"" +
+                            " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
+                            "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                            "ON od.id = op.\"orderDetailId\"\n" +
+                            "GROUP by od.id;"
+            );
+            return mapper.listFromResult(statement.executeQuery());
+        }catch (SQLException e){
+            System.out.println("Could not get all order details, SQLException: " + e);
+            return null;
+        }
     }
 
     @Override
-    public void update(List<OrderDetailDTO> orderDetails) throws SQLException {
+    public void update(List<OrderDetailDTO> orderDetails){
     }
 
     @Override
-    public void delete(Long id) throws SQLException {
-        if (connection.createStatement().executeUpdate(
-                "DELETE FROM " + DatabaseConfig.orderProductTableName +
-                        " WHERE \"orderDetailId\"=" + id) != 1) throw new SQLException();
+    public void delete(Long id){
+        try {
+            if (connection.createStatement().executeUpdate(
+                    "DELETE FROM " + DatabaseConfig.orderProductTableName +
+                            " WHERE \"orderDetailId\"=" + id) != 1) throw new SQLException();
 
-        defaultDelete(connection, DatabaseConfig.orderDetailTableName, id);
+            defaultDelete(connection, DatabaseConfig.orderDetailTableName, id);
+        } catch (SQLException e){
+            System.out.println("Could not delete order details, SQLException: " + e);
+        }
     }
 
     private static StringBuilder insertStringBuilder(List<OrderDetailDTO> orderDetails) {

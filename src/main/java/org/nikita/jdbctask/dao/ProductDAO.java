@@ -21,64 +21,76 @@ public class ProductDAO implements DAO<ProductDTO> {
     }
 
     @Override
-    public List<Long> create(List<ProductDTO> products) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "INSERT INTO " + DatabaseConfig.productTableName +
-                        "(id, name, price, quantity, available) " +
-                        "VALUES (?, ?, ?, ?, ?)");
+    public List<Long> create(List<ProductDTO> products) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "INSERT INTO " + DatabaseConfig.productTableName +
+                            "(id, name, price, quantity, available) " +
+                            "VALUES (?, ?, ?, ?, ?)");
 
-        for (ProductDTO product : products) {
-            statement.setLong(1, product.getId());
-            statement.setString(2, product.getName());
-            statement.setBigDecimal(3, product.getPrice());
-            statement.setLong(4, product.getQuantity());
-            statement.setBoolean(5, product.getAvailability());
-            statement.addBatch();
+            for (ProductDTO product : products) {
+                statement.setLong(1, product.getId());
+                statement.setString(2, product.getName());
+                statement.setBigDecimal(3, product.getPrice());
+                statement.setLong(4, product.getQuantity());
+                statement.setBoolean(5, product.getAvailability());
+                statement.addBatch();
+            }
+            if (statement.executeUpdate() != 1) throw new SQLException();
+        } catch (SQLException e){
+            System.out.println("Could not create products, SQLException: " + e);
         }
-        if (statement.executeUpdate() != 1) throw new SQLException();
         return null;
     }
 
     @Override
-    public ProductDTO findById(Long id) throws SQLException {
+    public ProductDTO findById(Long id)  {
         List<ProductDTO> results = mapper.listFromResult(defaultFindById(connection, DatabaseConfig.productTableName, id));
         return results.get(0);
     }
 
     @Override
-    public List<ProductDTO> getAll() throws SQLException {
+    public List<ProductDTO> getAll() {
         return mapper.listFromResult(defaultGetAll(connection, DatabaseConfig.productTableName));
     }
 
-    public List<ProductDTO> getMultiple(List<Long> ids) throws SQLException {
-        String idString = ids.toString().replace("[", "(").replace("]", ")");
-        PreparedStatement statement = connection.prepareStatement(
-                "SELECT * FROM " + DatabaseConfig.productTableName + " WHERE id IN " + idString);
+    public List<ProductDTO> getMultiple(List<Long> ids) {
+        try {
+            String idString = ids.toString().replace("[", "(").replace("]", ")");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM " + DatabaseConfig.productTableName + " WHERE id IN " + idString);
 
-        return mapper.listFromResult(statement.executeQuery());
-
-    }
-
-    @Override
-    public void update(List<ProductDTO> products) throws SQLException {
-        PreparedStatement statement = connection.prepareStatement(
-                "UPDATE " + DatabaseConfig.productTableName +
-                        " SET name = ?, price = ?, quantity = ?, available = ?" +
-                        " WHERE id = ?");
-
-        for (ProductDTO product : products) {
-            statement.setLong(1, product.getId());
-            statement.setString(2, product.getName());
-            statement.setBigDecimal(3, product.getPrice());
-            statement.setLong(4, product.getQuantity());
-            statement.setBoolean(5, product.getAvailability());
-            statement.addBatch();
+            return mapper.listFromResult(statement.executeQuery());
+        } catch (SQLException e){
+            System.out.println("Could not get products by IDs, SQLException: " + e);
+            return null;
         }
-        if (statement.executeUpdate() != 1) throw new SQLException();
     }
 
     @Override
-    public void delete(Long id) throws SQLException {
+    public void update(List<ProductDTO> products) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE " + DatabaseConfig.productTableName +
+                            " SET name = ?, price = ?, quantity = ?, available = ?" +
+                            " WHERE id = ?");
+
+            for (ProductDTO product : products) {
+                statement.setLong(1, product.getId());
+                statement.setString(2, product.getName());
+                statement.setBigDecimal(3, product.getPrice());
+                statement.setLong(4, product.getQuantity());
+                statement.setBoolean(5, product.getAvailability());
+                statement.addBatch();
+            }
+            if (statement.executeUpdate() != 1) throw new SQLException();
+        }catch (SQLException e){
+            System.out.println("Could not update products, SQLException: " + e);
+        }
+    }
+
+    @Override
+    public void delete(Long id) {
         defaultDelete(connection, DatabaseConfig.productTableName, id);
     }
 }
