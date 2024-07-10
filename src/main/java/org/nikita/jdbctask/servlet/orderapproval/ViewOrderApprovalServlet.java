@@ -6,30 +6,26 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderApprovalDAO;
-import org.nikita.jdbctask.dto.OrderApprovalDTO;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet("/orderApprovals")
 public class ViewOrderApprovalServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         OrderApprovalDAO db = new OrderApprovalDAO();
-        List<OrderApprovalDTO> orderApprovals = new ArrayList<>();
 
         try {
             Long id = Long.parseLong(req.getParameter("id"));
-            orderApprovals.add(db.findById(id));
+            resp.getOutputStream().println(db.findById(id).toString());
         } catch (Exception ignored) {}
 
         try {
-            orderApprovals = db.getAll();
+            resp.getOutputStream().println(db.getAll().toString());
         } catch (SQLException ignored) {}
 
-        resp.getOutputStream().println(orderApprovals.toString());
+
     }
 }
 
