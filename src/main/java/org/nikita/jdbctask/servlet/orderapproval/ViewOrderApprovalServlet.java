@@ -23,7 +23,7 @@ public class ViewOrderApprovalServlet extends HttpServlet {
         try {
             Long id = Long.parseLong(req.getParameter("id"));
             orderApprovals.add(db.findById(id));
-        } catch (SQLException ignored) {}
+        } catch (Exception ignored) {}
 
         try {
             orderApprovals = db.getAll();
