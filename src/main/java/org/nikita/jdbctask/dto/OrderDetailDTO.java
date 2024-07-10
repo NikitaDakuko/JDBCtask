@@ -27,7 +27,7 @@ public class OrderDetailDTO implements Serializable {
     public String toString() {
         StringBuilder productString = new StringBuilder();
         for (ProductDTO product : products) {
-            productString.append(product.getId()).append(" ");
+            productString.append(product.toString()).append(" ");
         }
 
         return "OrderDetail:{" +

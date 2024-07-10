@@ -18,8 +18,8 @@ public class OrderApprovalDTO implements Serializable {
     @Override
     public String toString(){
         return "OrderApproval{" +
-                " id: " + this.id +
-                ", orderDetail: " + this.orderDetail + "} ";
+                "\nid: " + this.id +
+                ",\norderDetail: " + this.orderDetail + "\n} ";
     }
 
     public OrderDetailDTO getOrderDetail() {
