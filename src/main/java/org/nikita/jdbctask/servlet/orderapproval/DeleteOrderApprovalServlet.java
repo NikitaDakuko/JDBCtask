@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderApprovalDAO;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 @WebServlet("/deleteOrderApproval")
 public class DeleteOrderApprovalServlet extends HttpServlet {
@@ -16,7 +17,12 @@ public class DeleteOrderApprovalServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long id = Long.parseLong(req.getParameter("id"));
         OrderApprovalDAO orderApprovalDAO = new OrderApprovalDAO();
-        orderApprovalDAO.delete(id);
-        req.getRequestDispatcher("/orderApprovals").forward(req, resp);
+
+        try {
+            orderApprovalDAO.delete(id);
+            req.getRequestDispatcher("/orderApprovals").forward(req, resp);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -10,6 +10,7 @@ import org.nikita.jdbctask.dto.ProductDTO;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 
 @WebServlet("/editProduct")
 public class EditProductServlet extends HttpServlet {
@@ -32,7 +33,12 @@ public class EditProductServlet extends HttpServlet {
                 Boolean.parseBoolean(req.getParameter("productAvailability")));
 
         ProductDAO dao = new ProductDAO();
-        dao.update(p);
+        try {
+            dao.update(p);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         resp.getOutputStream().println(p.toString());
     }
 }

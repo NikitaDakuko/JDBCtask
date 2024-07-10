@@ -9,6 +9,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class TestOrderDetailDAO {
     @BeforeAll
     static void beforeAll() {
         postgreSQLTestContainer.start();
-        recreateTable();
+        recreateTables();
     }
 
     @AfterAll
@@ -40,24 +41,30 @@ public class TestOrderDetailDAO {
 
     @AfterEach
     void afterEach(){
-        recreateTable();
+        recreateTables();
     }
 
-    static void recreateTable(){
-        TestDatabaseConfig.recreateOrderDetailTable(connection);
-        dao.create(testDTO1);
-        dao.create(testDTO2);
-        dao.create(testDTO4);
+    static void recreateTables(){
+        try {
+            TestDatabaseConfig.recreateOrderDetailTable(connection);
+            TestDatabaseConfig.recreateProductsTable(connection);
+            TestDatabaseConfig.recreateOrderProductTable(connection);
+            dao.create(testDTO1);
+            dao.create(testDTO2);
+            dao.create(testDTO4);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    void createDAOtest(){
-        assertEquals(dao.returnIds(dao.create(testDTO3)).get(0), 3L);
+    void createDAOtest() throws SQLException{
+        assertEquals(dao.create(testDTO3).get(0), 3L);
         assertEquals(4, dao.getAll().size());
     }
 
     @Test
-    public void getAllDAOtest(){
+    public void getAllDAOtest() throws SQLException{
         List<OrderDetailDTO> testData = new ArrayList<>();
         List<OrderDetailDTO> resultData = dao.getAll();
         testData.add(testDTO1);
@@ -69,13 +76,13 @@ public class TestOrderDetailDAO {
     }
 
     @Test
-    public void findByIdDAOtest(){
+    public void findByIdDAOtest() throws SQLException {
         OrderDetailDTO testDTO = dao.findById(testDTO2.getId());
         isEqual(testDTO2, testDTO);
     }
 
     @Test
-    public void deleteDAOtest(){
+    public void deleteDAOtest() throws SQLException{
         int currentSize = dao.getAll().size();
         dao.delete(1L);
         assertEquals(currentSize - 1, dao.getAll().size());

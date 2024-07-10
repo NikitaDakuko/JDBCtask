@@ -2,78 +2,86 @@ package org.nikita.jdbctask.dao;
 
 import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dto.OrderDetailDTO;
+import org.nikita.jdbctask.dto.ProductDTO;
 import org.nikita.jdbctask.interfaces.DAO;
 import org.nikita.jdbctask.mapper.dto.OrderDetailDTOMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 public class OrderDetailDAO implements DAO<OrderDetailDTO> {
-    private final String tableName = "public.\"orderDetail\"";
     private final OrderDetailDTOMapper mapper = new OrderDetailDTOMapper();
     private final Connection connection;
 
-    public OrderDetailDAO(Connection connection){
+    public OrderDetailDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public OrderDetailDAO(){
+    public OrderDetailDAO() {
         this.connection = DatabaseConfig.getConnection();
     }
 
     @Override
-    public ResultSet create(OrderDetailDTO orderDetail){
-        try {
-            PreparedStatement insertDetailsStatement = connection.prepareStatement(
-                    "INSERT INTO public.\"orderDetail\"(\n" +
-                            "id, \"totalAmount\", \"orderStatus\")\n" +
-                            "VALUES (?, ?, ?)\n" +
-                            "RETURNING id;");
+    public List<Long> create(List<OrderDetailDTO> orderDetails) throws SQLException {
+
+        PreparedStatement insertDetailsStatement = connection.prepareStatement(
+                "INSERT INTO " + DatabaseConfig.orderDetailTableName + "(\n" +
+                        "id, \"totalAmount\", \"orderStatus\")\n" +
+                        "VALUES (?, ?, ?)\n" +
+                        "RETURNING id;");
+        for (OrderDetailDTO orderDetail : orderDetails) {
             insertDetailsStatement.setLong(1, orderDetail.getId());
             insertDetailsStatement.setBigDecimal(2, orderDetail.getTotalAmount());
             insertDetailsStatement.setString(3, orderDetail.getOrderStatus().name());
-            return insertDetailsStatement.executeQuery();
+            insertDetailsStatement.addBatch();
         }
-        catch (SQLException e) {
-            System.out.println("Could not create orderDetail, SQLException: "+ e.getMessage());
-        }
-        return null;
+
+        List<Long> ids = returnId(insertDetailsStatement.executeQuery());
+        if (ids.size() == orderDetails.size()) {
+            PreparedStatement orderProductStatement = connection.prepareStatement(
+                    "INSERT INTO " + DatabaseConfig.orderProductTableName + "(\n" +
+                            "\"orderDetailId\", \"productId\")\n" +
+                            "VALUES (?, ?);"
+            );
+
+            for (int i = 0; i < orderDetails.size(); i++) {
+                for (ProductDTO p : orderDetails.get(i).getProducts()) {
+                    orderProductStatement.setLong(1, ids.get(i));
+                    orderProductStatement.setLong(2, p.getId());
+                    orderProductStatement.addBatch();
+                }
+            }
+        } else throw new SQLException("Couldn't insert all order details");
+
+        return ids;
     }
 
     @Override
-    public OrderDetailDTO findById(Long id) {
-        return mapper.listFromResult(defaultFindById(connection, tableName, id)).get(0);
+    public OrderDetailDTO findById(Long id) throws SQLException {
+        return mapper.listFromResult(defaultFindById(connection, DatabaseConfig.orderDetailTableName, id)).get(0);
     }
 
     @Override
-    public List<OrderDetailDTO> getAll() {
-        return mapper.listFromResult(defaultGetAll(connection, tableName));
+    public List<OrderDetailDTO> getAll() throws SQLException {
+
+        PreparedStatement statement = connection.prepareStatement(
+                "SELECT od.id, od.\"totalAmount\", od.\"orderStatus\", array_agg(op.\"productId\")" +
+                        " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
+                        "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
+                        "ON od.id = op.\"orderDetailId\"\n" +
+                        "GROUP by od.id"
+        );
+        return mapper.listFromResult(statement.executeQuery());
     }
 
     @Override
-    public void update(OrderDetailDTO orderDetail){
-//        try {
-//            PreparedStatement statement = connection.prepareStatement(
-//                    "UPDATE " + tableName +
-//                            " SET name = ?, price = "+orderApproval.getPrice().val + ", quantity = ?, available = ?" +
-//                            " WHERE id = ?");
-//            statement.setString(1, orderApproval.getName());
-//            statement.setLong(2, orderApproval.getQuantity());
-//            statement.setBoolean(3, orderApproval.getAvailability());
-//            statement.setLong(4, orderApproval.getId());
-//
-//            if (statement.executeUpdate()!=1) throw new SQLException();
-//        }
-//        catch (SQLException e) {
-//            System.out.println("Could not update orderDetail with id = " + product.getId() + ", SQLException: "+ e.getMessage());
-//        }
+    public void update(List<OrderDetailDTO> orderDetails) throws SQLException {
     }
 
     @Override
-    public void delete(Long id){
-        defaultDelete(connection, tableName, id);
+    public void delete(Long id) throws SQLException {
+        defaultDelete(connection, DatabaseConfig.orderDetailTableName, id);
     }
 }

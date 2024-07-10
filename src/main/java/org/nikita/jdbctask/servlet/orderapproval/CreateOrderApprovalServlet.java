@@ -9,10 +9,10 @@ import org.nikita.jdbctask.dao.OrderApprovalDAO;
 import org.nikita.jdbctask.dto.OrderApprovalDTO;
 import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.enums.OrderStatus;
-import org.nikita.jdbctask.mapper.dto.ProductDTOMapper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 
 @WebServlet("/createOrderApproval")
 public class CreateOrderApprovalServlet extends HttpServlet {
@@ -27,10 +27,15 @@ public class CreateOrderApprovalServlet extends HttpServlet {
         OrderApprovalDTO p = new OrderApprovalDTO(
                 new OrderDetailDTO(
                         OrderStatus.valueOf(req.getParameter("orderStatus")),
-                        new ProductDTOMapper().parseProductsString(req.getParameter("products")),
+                        null, //new ProductDTOMapper().parseProductsString(req.getParameter("products")),
                         new BigDecimal(req.getParameter("totalAmount")))
                 );
-        new OrderApprovalDAO().create(p);
+
+        try {
+            new OrderApprovalDAO().create(p);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         resp.getOutputStream().println(p.toString());
     }
 }

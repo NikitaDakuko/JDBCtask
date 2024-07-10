@@ -9,6 +9,7 @@ import org.nikita.jdbctask.dao.OrderApprovalDAO;
 import org.nikita.jdbctask.dto.OrderApprovalDTO;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,11 @@ public class ViewOrderApprovalServlet extends HttpServlet {
             Long id = Long.parseLong(req.getParameter("id"));
             orderApprovals.add(db.findById(id));
         } catch (Exception e) {
-            orderApprovals = db.getAll();
+            try {
+                orderApprovals = db.getAll();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         resp.getOutputStream().println(orderApprovals.toString());
     }

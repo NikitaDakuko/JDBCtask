@@ -9,6 +9,7 @@ import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,11 @@ public class ViewProductServlet extends HttpServlet {
             Long id = Long.parseLong(req.getParameter("id"));
             productList.add(dao.findById(id));
         } catch (Exception e) {
-            productList = dao.getAll();
+            try {
+                productList = dao.getAll();
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
         }
         resp.getOutputStream().println(productList.toString());
     }

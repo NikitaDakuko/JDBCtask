@@ -5,65 +5,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface DAO<T> {
-    default ResultSet defaultFindById(Connection connection, String tableName, Long id){
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?");
-            statement.setLong(1, id);
-            return statement.executeQuery();
-        }
-        catch (SQLException e) {
-            System.out.println(
-                    "Could not find " + tableName + " record with id = " + id + ", SQLException: "+ e.getMessage());
-            return null;
-        }
+    default ResultSet defaultFindById(Connection connection, String tableName, Long id) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?");
+        statement.setLong(1, id);
+        return statement.executeQuery();
     }
 
-    default ResultSet defaultGetAll(Connection connection, String tableName){
-        try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName);
-            return statement.executeQuery();
-        }
-        catch (SQLException e) {
-            System.out.println(
-                    "Could not find " + tableName + " record, SQLException: "+ e.getMessage());
-        }
-        return null;
+    default ResultSet defaultGetAll(Connection connection, String tableName) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName);
+        return statement.executeQuery();
     }
 
-    default void defaultDelete(Connection connection, String tableName, long id){
-        try {
-            if(connection.createStatement().executeUpdate(
-                    "DELETE FROM " + tableName +
-                            " WHERE id=" + id) != 1) throw new SQLException();
-        }
-        catch (SQLException e) {
-            System.out.println(
-                    "Could not delete " + tableName + " record with id = " + id + ", SQLException: "+ e.getMessage());
-        }
+    default void defaultDelete(Connection connection, String tableName, long id) throws SQLException {
+        if (connection.createStatement().executeUpdate(
+                "DELETE FROM " + tableName +
+                        " WHERE id=" + id) != 1) throw new SQLException();
     }
 
-    default List<Long> returnIds (ResultSet resultSet){
-        try {
-            List<Long> insertedIds = new ArrayList<>();
-            while (resultSet.next()){
-                insertedIds.add(resultSet.getLong(1));
-            }
-            return insertedIds;
+    default List<Long> returnId(ResultSet resultSet) throws SQLException {
+        List<Long> insertedIds = new ArrayList<>();
+        while (resultSet.next()) {
+            insertedIds.add(resultSet.getLong(1));
         }
-        catch (SQLException e) {
-            System.out.println(
-                    "Could not return inserted record ids, SQLException: "+ e.getMessage());
-            return null;
-        }
+        return insertedIds;
     }
 
-    ResultSet create(T item);
+    default List<Long> create(T item) throws SQLException {
+        List<T> items = new ArrayList<>();
+        items.add(item);
+        return create(items);
+    };
 
-    T findById(Long id);
+    List<Long> create(List<T> items) throws SQLException;
 
-    List<T> getAll();
+    T findById(Long id) throws SQLException;
 
-    void update(T newItem);
+    List<T> getAll() throws SQLException;
 
-    void delete(Long id);
+    default void update(T newItem) throws SQLException {
+        List<T> newItems = new ArrayList<>();
+        newItems.add(newItem);
+        update(newItems);
+    };
+
+    void update(List<T> newItems) throws SQLException;
+
+    void delete(Long id) throws SQLException;
 }

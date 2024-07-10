@@ -8,6 +8,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,20 +44,25 @@ public class TestProductDAO {
     }
 
     static void recreateDAO(){
-        TestDatabaseConfig.recreateProductsTable(connection);
-        productDAO.create(testDTO1);
-        productDAO.create(testDTO2);
-        productDAO.create(testDTO3);
-        productDAO.create(testDTO4);
+        try {
+            TestDatabaseConfig.recreateProductsTable(connection);
+            productDAO.create(testDTO1);
+            productDAO.create(testDTO2);
+            productDAO.create(testDTO3);
+            productDAO.create(testDTO4);
+        }
+        catch (SQLException e){
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
-    void createDAOtest(){
+    void createDAOtest() throws SQLException {
         assertEquals(4, productDAO.getAll().size());
     }
 
     @Test
-    public void getAllDAOtest(){
+    public void getAllDAOtest() throws SQLException {
         List<ProductDTO> testData = new ArrayList<>();
         List<ProductDTO> resultData = productDAO.getAll();
         System.out.println(resultData);
@@ -70,13 +76,13 @@ public class TestProductDAO {
     }
 
     @Test
-    public void findByIdDAOtest(){
+    public void findByIdDAOtest() throws SQLException {
         ProductDTO testDTO = productDAO.findById(testDTO3.getId());
         isEqual(testDTO3, testDTO);
     }
 
     @Test
-    public void getMultipleDAOtest(){
+    public void getMultipleDAOtest() throws SQLException {
         List<ProductDTO> testData = new ArrayList<>();
         testData.add(testDTO2);
         testData.add(testDTO3);
@@ -91,7 +97,7 @@ public class TestProductDAO {
     }
 
     @Test
-    public void deleteDAOtest(){
+    public void deleteDAOtest() throws SQLException {
         int currentSize = productDAO.getAll().size();
         productDAO.delete(1L);
         assertEquals(currentSize - 1, productDAO.getAll().size());

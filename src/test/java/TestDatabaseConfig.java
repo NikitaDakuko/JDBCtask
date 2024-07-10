@@ -37,39 +37,67 @@ public class TestDatabaseConfig {
         }
     }
 
-    public static void recreateProductsTable(Connection connection){
-        try {
-            connection.prepareStatement(
-                    "DROP TABLE IF EXISTS public.\"product\";\n" +
-                            "CREATE TABLE IF NOT EXISTS public.\"product\"\n" +
-                            "(\n" +
-                            "    id serial NOT NULL,\n" +
-                            "    name character varying(255) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
-                            "    price numeric NOT NULL,\n" +
-                            "    quantity integer NOT NULL,\n" +
-                            "    available boolean NOT NULL,\n" +
-                            "    PRIMARY KEY (id)" +
-                            ")").execute();
+    public static void recreateProductsTable(Connection connection) throws SQLException {
+        String tableName = DatabaseConfig.productTableName;
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        connection.prepareStatement(
+                "DROP TABLE IF EXISTS " + tableName + " CASCADE;\n" +
+                        "CREATE TABLE IF NOT EXISTS " + tableName + "\n" +
+                        "(\n" +
+                        "    id serial NOT NULL,\n" +
+                        "    name character varying(255) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
+                        "    price numeric NOT NULL,\n" +
+                        "    quantity integer NOT NULL,\n" +
+                        "    available boolean NOT NULL,\n" +
+                        "    PRIMARY KEY (id)" +
+                        ")").execute();
     }
 
-    public static void recreateOrderDetailTable(Connection connection){
-        try {
-            connection.prepareStatement(
-                    "DROP TABLE IF EXISTS public.\"orderDetail\";\n" +
-                            "CREATE TABLE IF NOT EXISTS public.\"orderDetail\"\n" +
-                            "(\n" +
-                            "    id serial NOT NULL,\n" +
-                            "    \"totalAmount\" numeric NOT NULL,\n" +
-                            "    \"orderStatus\" character varying(32) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
-                            "    CONSTRAINT \"orderDetail_pkey\" PRIMARY KEY (id)\n" +
-                            ")").execute();
+    public static void recreateOrderDetailTable(Connection connection) throws SQLException {
+        String tableName = DatabaseConfig.orderDetailTableName;
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        connection.prepareStatement(
+                "DROP TABLE IF EXISTS " + tableName + " CASCADE;\n" +
+                        "CREATE TABLE IF NOT EXISTS " + tableName + "\n" +
+                        "(\n" +
+                        "    id serial NOT NULL,\n" +
+                        "    \"totalAmount\" numeric NOT NULL,\n" +
+                        "    \"orderStatus\" character varying(32) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
+                        "    CONSTRAINT \"orderDetail_pkey\" PRIMARY KEY (id)\n" +
+                        ")").execute();
+    }
+
+    public static void recreateOrderProductTable(Connection connection) throws SQLException {
+        String tableName = DatabaseConfig.orderProductTableName;
+
+        connection.prepareStatement(
+                "DROP TABLE IF EXISTS " + tableName + " CASCADE;\n" +
+                        "CREATE TABLE IF NOT EXISTS " + tableName + "\n" +
+                        "(\n" +
+                        "    \"orderDetailId\" bigint NOT NULL,\n" +
+                        "    \"productId\" bigint NOT NULL,\n" +
+                        "    CONSTRAINT \"orderDetailId\" FOREIGN KEY (\"orderDetailId\")\n" +
+                        "        REFERENCES " + DatabaseConfig.orderDetailTableName + " (id) MATCH SIMPLE\n" +
+                        "        ON UPDATE NO ACTION\n" +
+                        "        ON DELETE NO ACTION,\n" +
+                        "    CONSTRAINT \"productId\" FOREIGN KEY (\"productId\")\n" +
+                        "        REFERENCES " + DatabaseConfig.productTableName + " (id) MATCH SIMPLE\n" +
+                        "        ON UPDATE NO ACTION\n" +
+                        "        ON DELETE NO ACTION\n" +
+                        ")").execute();
+    }
+
+    public static void recreateOrderApprovalTable(Connection connection) throws SQLException {
+        String tableName = DatabaseConfig.orderApprovalTableName;
+
+        connection.prepareStatement(
+                "DROP TABLE IF EXISTS " + tableName + " CASCADE;\n" +
+                        "CREATE TABLE IF NOT EXISTS " + tableName + "\n" +
+                        "(\n" +
+                        "    id serial NOT NULL,\n" +
+                        "    \"totalAmount\" numeric NOT NULL,\n" +
+                        "    \"orderStatus\" character varying(32) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
+                        "    CONSTRAINT \"orderDetail_pkey\" PRIMARY KEY (id)\n" +
+                        ")").execute();
     }
 }
