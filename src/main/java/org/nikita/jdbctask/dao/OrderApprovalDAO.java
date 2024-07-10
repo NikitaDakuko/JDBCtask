@@ -61,7 +61,7 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
                         "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
                         "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
                         "WHERE oa.id = ?\n" +
-                        "GROUP by oa.\"orderDetailId\";"
+                        "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id;"
         );
         statement.setLong(1, id);
         List<OrderApprovalDTO> dtos = mapper.listFromResult(statement.executeQuery());
