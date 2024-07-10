@@ -39,12 +39,11 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
             if (insertedOrderDetailIds.size() == orderApprovals.size()) {
                 PreparedStatement statement = connection.prepareStatement(
                         "INSERT INTO " + DatabaseConfig.orderApprovalTableName + "(\n" +
-                                "id, \"orderDetailId\")\n" +
-                                "VALUES (?, ?)");
+                                "\"orderDetailId\")\n" +
+                                "VALUES (?)");
 
                 for (int i = 0; i < orderApprovals.size(); i++) {
-                    statement.setLong(1, orderApprovals.get(i).getId());
-                    statement.setLong(2, insertedOrderDetailIds.get(i));
+                    statement.setLong(1, insertedOrderDetailIds.get(i));
                     statement.addBatch();
                 }
                 if (statement.executeUpdate() != 1) throw new SQLException();
