@@ -24,7 +24,19 @@
                 <td> ${record.getId()} </td>
                 <td> ${record.getOrderDetail().getId()} </td>
                 <td> ${record.getOrderDetail().getOrderStatus()} </td>
-                <td> ${record.getOrderDetail().getProducts()} </td>
+                <td>
+                    <table>
+                        <c:forEach items="${record.getOrderDetail().getProducts()}" var="product">
+                            <tr>
+                                <td> ${product.getId()} </td>
+                                <td> ${product.getName()} </td>
+                                <td> ${product.getPrice()} </td>
+                                <td> ${product.getQuantity()} </td>
+                                <td> ${product.getAvailability()} </td>
+                            </tr>
+                            </c:forEach>
+                    </table>
+                </td>
                 <td> ${record.getOrderDetail().getTotalAmount()} </td>
                 <td>
                     <a href="editProduct?id=${record.getId()}">
