@@ -25,7 +25,7 @@
                 <td> ${record.getOrderDetail().getId()} </td>
                 <td> ${record.getOrderDetail().getOrderStatus()} </td>
                 <td> ${record.getOrderDetail().getProducts()} </td>
-                <td> ${record.getOrderDetail().getTotalAmount} </td>
+                <td> ${record.getOrderDetail().getTotalAmount()} </td>
                 <td>
                     <a href="editProduct?id=${record.getId()}">
                         <button onclick=> Edit </button>
