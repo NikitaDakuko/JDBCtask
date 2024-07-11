@@ -8,14 +8,22 @@ import org.nikita.jdbctask.mapper.dto.OrderDetailDTOMapper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for OrderDetail entity.
+ * Works with DTOs
+ */
 public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     private final OrderDetailDTOMapper mapper = new OrderDetailDTOMapper();
     private final Connection connection;
 
+    /**
+     * @param connection custom DB connection for testing
+     */
     public OrderDetailDAO(Connection connection) {
         this.connection = connection;
     }
@@ -24,11 +32,14 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         this.connection = DatabaseConfig.getConnection();
     }
 
+    /**
+     * @param orderDetails List of OrderDetailDTO to be inserted into a database
+     */
     @Override
     public List<Long> create(List<OrderDetailDTO> orderDetails) {
         try {
             PreparedStatement insertDetailsStatement = connection.prepareStatement(
-                    insertQuerryBuilder(orderDetails));
+                    insertQueryBuilder(orderDetails));
 
             List<Long> ids = returnId(insertDetailsStatement.executeQuery());
 
@@ -52,6 +63,10 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         return null;
     }
 
+    /**
+     * @param id ID of a record that you want to retrieve
+     * @return DTO of the OrderDetail entity
+     */
     @Override
     public OrderDetailDTO findById(Long id) {
         try {
@@ -74,6 +89,9 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         }
     }
 
+    /**
+     * @return All OrderApproval entities that are currently stored in the DB
+     */
     @Override
     public List<OrderDetailDTO> getAll() {
         try {
@@ -92,6 +110,9 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         }
     }
 
+    /**
+     * @param orderDetails List of OrderDetail DTOs to be updated
+     */
     @Override
     public void update(List<OrderDetailDTO> orderDetails) {
         try {
@@ -124,12 +145,21 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         }
     }
 
+    /**
+     * @param id ID of the OrderDetail you want to be deleted
+     */
     @Override
     public void delete(Long id) {
         defaultDelete(connection, DatabaseConfig.orderDetailTableName, id);
     }
 
-    private String insertQuerryBuilder(List<OrderDetailDTO> orderDetails) {
+
+    /**
+     * Custom SQL query generator which adds statement to return IDs
+     * @param orderDetails List of OrderDetail DTOs to be inserted
+     * @return SQL query
+     */
+    private String insertQueryBuilder(List<OrderDetailDTO> orderDetails) {
         StringBuilder insertDetailsQuerry = new StringBuilder(
                 "INSERT INTO " + DatabaseConfig.orderDetailTableName +
                         "(\"totalAmount\", \"orderStatus\") VALUES\n");
@@ -146,6 +176,11 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
         return insertDetailsQuerry.toString();
     }
 
+    /**
+     * Query for inserting into a link table to facilitate Many-to-Many relationship between OrderDetail and Product entities
+     * @param orderDetails List of OrderDetail DTOs, Products of which to be linked
+     * @throws SQLException Error when inserting
+     */
     private void createOrderProducts(List<OrderDetailDTO> orderDetails) throws SQLException {
         PreparedStatement orderProductStatement = connection.prepareStatement(
                 "INSERT INTO " + DatabaseConfig.orderProductTableName + "(\n" +
@@ -160,6 +195,23 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
                 orderProductStatement.addBatch();
             }
             orderProductStatement.executeBatch();
+        }
+    }
+
+    /**
+     * @param resultSet Result set after inserting a list of OrderDetail entities
+     * @return List of IDs of inserted OrderDetail entities
+     */
+    private List<Long> returnId(ResultSet resultSet) {
+        try {
+            List<Long> insertedIds = new ArrayList<>();
+            while (resultSet.next()) {
+                insertedIds.add(resultSet.getLong(1));
+            }
+            return insertedIds;
+        } catch (SQLException e) {
+            System.out.println("Could not get return IDs. SQLException: " + e);
+            return null;
         }
     }
 }

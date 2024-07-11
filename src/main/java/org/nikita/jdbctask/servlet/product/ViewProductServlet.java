@@ -1,6 +1,5 @@
 package org.nikita.jdbctask.servlet.product;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,10 +12,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servlet for viewing all products in database.
+ * Can view individual product by passing ID as a parameter
+ */
 @WebServlet("/products")
 public class ViewProductServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ProductDAO dao = new ProductDAO();
         List<ProductDTO> productList = new ArrayList<>();
 
@@ -27,10 +30,9 @@ public class ViewProductServlet extends HttpServlet {
             productList = dao.getAll();
         }
 
-        ServletContext servletContext = getServletContext();
-        servletContext.setAttribute("tableName", "Products");
-        servletContext.setAttribute("records", productList);
-        getServletContext().getRequestDispatcher("/WEB-INF/productTable.jsp").forward(req, resp);
+        req.setAttribute("tableName", "Products");
+        req.setAttribute("records", productList);
+        req.getRequestDispatcher("/WEB-INF/productTable.jsp").forward(req, resp);
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse  response) throws IOException, ServletException{

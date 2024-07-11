@@ -9,6 +9,10 @@ import org.nikita.jdbctask.dao.ProductDAO;
 
 import java.io.IOException;
 
+/**
+ * Servlet for deleting products
+ * takes ID parameter
+ */
 @WebServlet("/deleteProduct")
 public class DeleteProductServlet extends HttpServlet {
 

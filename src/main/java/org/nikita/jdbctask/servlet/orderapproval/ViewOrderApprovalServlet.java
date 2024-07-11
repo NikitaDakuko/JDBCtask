@@ -13,6 +13,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servlet for viewing all products in database.
+ * Can view individual product by passing ID as a parameter
+ */
 @WebServlet("/orderApprovals")
 public class ViewOrderApprovalServlet extends HttpServlet {
     @Override

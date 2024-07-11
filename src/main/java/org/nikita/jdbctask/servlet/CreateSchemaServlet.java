@@ -10,7 +10,7 @@ import org.nikita.jdbctask.DatabaseConfig;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@WebServlet("createSchema")
+@WebServlet("/createSchema")
 public class CreateSchemaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

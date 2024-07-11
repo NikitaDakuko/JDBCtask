@@ -13,6 +13,10 @@ import org.nikita.jdbctask.enums.OrderStatus;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * Servlet for editing order approvals
+ * takes ID parameter
+ */
 @WebServlet("/editOrderApproval")
 public class EditOrderApprovalServlet extends HttpServlet {
 

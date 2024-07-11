@@ -12,11 +12,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Data Access Object for OrderApproval entity.
+ * Works with DTOs
+ */
 public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
     private final OrderDetailDAO orderDetailDAO;
     private final OrderApprovalDTOMapper mapper = new OrderApprovalDTOMapper();
     private final Connection connection;
 
+    /**
+     * @param connection custom DB connection for testing
+     */
     public OrderApprovalDAO(Connection connection) {
         this.connection = connection;
         this.orderDetailDAO = new OrderDetailDAO(connection);
@@ -27,6 +34,9 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
         this.orderDetailDAO = new OrderDetailDAO(connection);
     }
 
+    /**
+     * @param orderApprovals List of OrderApprovalDTO to be inserted into a database
+     */
     @Override
     public List<Long> create(List<OrderApprovalDTO> orderApprovals) {
         try {
@@ -54,6 +64,10 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
         return null;
     }
 
+    /**
+     * @param id ID of a record that you want to retrieve
+     * @return DTO of the OrderApproval entity
+     */
     @Override
     public OrderApprovalDTO findById(Long id) {
         try {
@@ -78,6 +92,9 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
         }
     }
 
+    /**
+     * @return All OrderApproval entities that are currently stored in the DB
+     */
     @Override
     public List<OrderApprovalDTO> getAll() {
         try {
@@ -98,6 +115,9 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
         }
     }
 
+    /**
+     * @param orderApprovals List of OrderApproval DTOs to be updated
+     */
     @Override
     public void update(List<OrderApprovalDTO> orderApprovals) {
         List<OrderDetailDTO> orderDetails = new ArrayList<>();
@@ -107,6 +127,9 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
         new OrderDetailDAO(connection).update(orderDetails);
     }
 
+    /**
+     * @param id ID of the OrderApproval you want to be deleted
+     */
     @Override
     public void delete(Long id) {
         defaultDelete(connection, DatabaseConfig.orderApprovalTableName, id);

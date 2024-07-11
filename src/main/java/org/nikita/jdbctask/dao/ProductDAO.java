@@ -8,10 +8,17 @@ import org.nikita.jdbctask.mapper.dto.ProductDTOMapper;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * Data Access Object for Product entity.
+ * Works with DTOs
+ */
 public class ProductDAO implements DAO<ProductDTO> {
     private final ProductDTOMapper mapper = new ProductDTOMapper();
     private final Connection connection;
 
+    /**
+     * @param connection custom DB connection for testing
+     */
     public ProductDAO(Connection connection) {
         this.connection = connection;
     }
@@ -20,6 +27,9 @@ public class ProductDAO implements DAO<ProductDTO> {
         this.connection = DatabaseConfig.getConnection();
     }
 
+    /**
+     * @param products List of ProductDTO to be inserted into a database
+     */
     @Override
     public List<Long> create(List<ProductDTO> products) {
         try {
@@ -42,12 +52,19 @@ public class ProductDAO implements DAO<ProductDTO> {
         return null;
     }
 
+    /**
+     * @param id ID of a record that you want to retrieve
+     * @return DTO of the Product entity
+     */
     @Override
     public ProductDTO findById(Long id)  {
         List<ProductDTO> results = mapper.listFromResult(defaultFindById(connection, DatabaseConfig.productTableName, id));
         return results.get(0);
     }
 
+    /**
+     * @return All Product entities that are currently stored in the DB
+     */
     @Override
     public List<ProductDTO> getAll() {
         return mapper.listFromResult(defaultGetAll(connection, DatabaseConfig.productTableName));
@@ -66,6 +83,9 @@ public class ProductDAO implements DAO<ProductDTO> {
         }
     }
 
+    /**
+     * @param products List of Product DTOs to be updated
+     */
     @Override
     public void update(List<ProductDTO> products) {
         try {
@@ -88,6 +108,9 @@ public class ProductDAO implements DAO<ProductDTO> {
         }
     }
 
+    /**
+     * @param id ID of the Product you want to be deleted
+     */
     @Override
     public void delete(Long id) {
         defaultDelete(connection, DatabaseConfig.productTableName, id);

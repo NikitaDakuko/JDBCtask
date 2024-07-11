@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.nikita.jdbctask.dao.OrderApprovalDAO;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
+/**
+ * Servlet for deleting order approvals
+ * takes ID parameter
+ */
 @WebServlet("/deleteOrderApproval")
 public class DeleteOrderApprovalServlet extends HttpServlet {
 

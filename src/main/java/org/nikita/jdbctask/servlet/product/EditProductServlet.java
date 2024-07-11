@@ -11,6 +11,10 @@ import org.nikita.jdbctask.dto.ProductDTO;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * Servlet for editing products
+ * takes ID parameter
+ */
 @WebServlet("/editProduct")
 public class EditProductServlet extends HttpServlet {
     private Long id;

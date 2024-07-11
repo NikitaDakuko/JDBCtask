@@ -16,6 +16,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servlet for creating order approvals
+ * Creates a product and forwards you to a ViewOrderApprovalServlet
+ */
 @WebServlet("/createOrderApproval")
 public class CreateOrderApprovalServlet extends HttpServlet {
 

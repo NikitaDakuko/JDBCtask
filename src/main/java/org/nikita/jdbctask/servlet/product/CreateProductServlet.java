@@ -11,6 +11,10 @@ import org.nikita.jdbctask.dto.ProductDTO;
 import java.io.IOException;
 import java.math.BigDecimal;
 
+/**
+ * Servlet for creating products
+ * Creates a product and forwards you to a ViewProductServlet
+ */
 @WebServlet("/createProduct")
 public class CreateProductServlet extends HttpServlet {
 
