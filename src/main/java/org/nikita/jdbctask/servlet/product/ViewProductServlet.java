@@ -32,6 +32,10 @@ public class ViewProductServlet extends HttpServlet {
         servletContext.setAttribute("records", productList);
         getServletContext().getRequestDispatcher("/WEB-INF/productTable.jsp").forward(req, resp);
     }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse  response) throws IOException, ServletException{
+        doGet(request, response);
+    }
 }
 
 

@@ -31,7 +31,10 @@ public class ViewOrderApprovalServlet extends HttpServlet {
         servletContext.setAttribute("tableName", "Order Approvals");
         servletContext.setAttribute("records", orderApprovals);
         getServletContext().getRequestDispatcher("/WEB-INF/orderApprovalTable.jsp").forward(req, resp);
+    }
 
+    public void doPost(HttpServletRequest request, HttpServletResponse  response) throws IOException, ServletException {
+        doGet(request, response);
     }
 }
 
