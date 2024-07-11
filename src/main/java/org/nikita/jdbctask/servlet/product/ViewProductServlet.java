@@ -1,5 +1,6 @@
 package org.nikita.jdbctask.servlet.product;
 
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -25,10 +26,10 @@ public class ViewProductServlet extends HttpServlet {
         } catch (Exception e) {
             productList = dao.getAll();
         }
-        resp.getOutputStream().println(productList.toString());
 
-        req.setAttribute("tableName", "Products");
-        req.setAttribute("table", formTable(productList));
+        ServletContext servletContext = getServletContext();
+        servletContext.setAttribute("tableName", "Products");
+        servletContext.setAttribute("table", formTable(productList));
 
         getServletContext().getRequestDispatcher("/WEB-INF/table.jsp").forward(req, resp);
     }
