@@ -95,9 +95,8 @@ public class TestDatabaseConfig {
                         "CREATE TABLE IF NOT EXISTS " + tableName + "\n" +
                         "(\n" +
                         "    id serial NOT NULL,\n" +
-                        "    \"totalAmount\" numeric NOT NULL,\n" +
-                        "    \"orderStatus\" character varying(32) COLLATE pg_catalog.\"default\" NOT NULL,\n" +
-                        "    CONSTRAINT \"orderDetail_pkey\" PRIMARY KEY (id)\n" +
+                        "    \"orderDetailId\" bigint NOT NULL,\n" +
+                        "    CONSTRAINT \"orderApproval_pkey\" PRIMARY KEY (id)\n" +
                         ")").execute();
     }
 }

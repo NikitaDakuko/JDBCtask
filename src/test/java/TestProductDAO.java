@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +24,7 @@ public class TestProductDAO {
     static ProductDTO testDTO2 = new ProductDTO(2L,"test product2", BigDecimal.valueOf(1D), 2, false);
     static ProductDTO testDTO3 = new ProductDTO(3L,"test product3", BigDecimal.valueOf(1984D), 50, false);
     static ProductDTO testDTO4 = new ProductDTO(4L,"test product4", BigDecimal.valueOf(20D), 900, true);
+    static List<ProductDTO> testDTOs = Arrays.asList(testDTO1, testDTO2, testDTO3, testDTO4);
 
     static PostgreSQLContainer postgreSQLTestContainer = new PostgreSQLContainer<>(
             "postgres:16-alpine"
@@ -47,10 +49,7 @@ public class TestProductDAO {
     static void recreateDAO(){
         try {
             TestDatabaseConfig.recreateProductsTable(connection);
-            productDAO.create(testDTO1);
-            productDAO.create(testDTO2);
-            productDAO.create(testDTO3);
-            productDAO.create(testDTO4);
+            productDAO.create(testDTOs);
         }
         catch (SQLException e){
             throw new RuntimeException(e);
@@ -58,20 +57,9 @@ public class TestProductDAO {
     }
 
     @Test
-    void createDAOtest() {
-        assertEquals(4, productDAO.getAll().size());
-    }
-
-    @Test
     public void getAllDAOtest() {
-        List<ProductDTO> testData = new ArrayList<>();
         List<ProductDTO> resultData = productDAO.getAll();
-        testData.add(testDTO1);
-        testData.add(testDTO2);
-        testData.add(testDTO3);
-        testData.add(testDTO4);
-
-        assertEquals(testData.toString(), resultData.toString());
+        assertEquals(testDTOs.toString(), resultData.toString());
     }
 
     @Test
@@ -82,9 +70,8 @@ public class TestProductDAO {
 
     @Test
     public void getMultipleDAOtest() {
-        List<ProductDTO> testData = new ArrayList<>();
-        testData.add(testDTO1);
-        testData.add(testDTO2);
+        List<ProductDTO> testData = Arrays.asList(testDTO1, testDTO2);
+
         List<Long> idArray = new ArrayList<>();
         for (ProductDTO p : testData)
             idArray.add(p.getId());

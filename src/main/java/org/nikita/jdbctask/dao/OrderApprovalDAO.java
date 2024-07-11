@@ -42,14 +42,14 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
                                 "\"orderDetailId\")\n" +
                                 "VALUES (?)");
 
-                for (int i = 0; i < orderApprovals.size(); i++) {
-                    statement.setLong(1, insertedOrderDetailIds.get(i));
+                for (Long id:insertedOrderDetailIds){
+                    statement.setLong(1, id);
                     statement.addBatch();
                 }
-                if (statement.executeUpdate() != 1) throw new SQLException();
+                statement.executeBatch();
             }
         } catch (SQLException e) {
-            System.out.println("Could not create order approval by ID, SQLException: " + e);
+            System.out.println("Could not create order approval, SQLException: " + e);
         }
         return null;
     }
@@ -99,6 +99,11 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
 
     @Override
     public void update(List<OrderApprovalDTO> orderApprovals) {
+        List<OrderDetailDTO> orderDetails = new ArrayList<>();
+        for (OrderApprovalDTO oa : orderApprovals)
+            orderDetails.add(oa.getOrderDetail());
+
+        new OrderDetailDAO(connection).update(orderDetails);
     }
 
     @Override

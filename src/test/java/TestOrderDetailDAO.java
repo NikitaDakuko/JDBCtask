@@ -11,7 +11,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,11 +21,42 @@ public class TestOrderDetailDAO {
     static Connection connection = TestDatabaseConfig.getConnection();
     static OrderDetailDAO dao = new OrderDetailDAO(connection);
 
-    static OrderDetailDTO testDTO1;
-    static OrderDetailDTO testDTO2;
-    static OrderDetailDTO testDTO3;
-    static OrderDetailDTO testDTO4;
-    static List<OrderDetailDTO> testDTOs = new ArrayList<>();
+    static OrderDetailDTO testDTO1 =
+            new OrderDetailDTO(1L,
+                    OrderStatus.NEW,
+                    Arrays.asList(
+                            TestProductDAO.testDTO1,
+                            TestProductDAO.testDTO2,
+                            TestProductDAO.testDTO3,
+                            TestProductDAO.testDTO4
+                    ),
+                    BigDecimal.valueOf(42));;
+    static OrderDetailDTO testDTO2 =
+            new OrderDetailDTO(2L,
+                    OrderStatus.COMPLETE,
+                    Arrays.asList(
+                            TestProductDAO.testDTO2,
+                            TestProductDAO.testDTO4
+                    ),
+                    BigDecimal.valueOf(1984));
+    static OrderDetailDTO testDTO3 =
+            new OrderDetailDTO(3L,
+                    OrderStatus.PROCESSING,
+                    Arrays.asList(
+                            TestProductDAO.testDTO2,
+                            TestProductDAO.testDTO3,
+                            TestProductDAO.testDTO4
+                    ),
+                    BigDecimal.valueOf(2));;
+    static OrderDetailDTO testDTO4 =
+            new OrderDetailDTO(4L,
+                    OrderStatus.COMPLETE,
+                    Arrays.asList(
+                            TestProductDAO.testDTO1,
+                            TestProductDAO.testDTO4
+                    ),
+                    BigDecimal.valueOf(666));
+    static List<OrderDetailDTO> testDTOs = Arrays.asList(testDTO1, testDTO2, testDTO3, testDTO4);
 
     static PostgreSQLContainer postgreSQLTestContainer = new PostgreSQLContainer<>(
             "postgres:16-alpine"
@@ -33,31 +64,6 @@ public class TestOrderDetailDAO {
 
     @BeforeAll
     static void beforeAll() {
-        List<ProductDTO> testProducts1 = new ArrayList<>();
-        List<ProductDTO> testProducts2 = new ArrayList<>();
-        List<ProductDTO> testProducts3 = new ArrayList<>();
-
-        testProducts1.add(TestProductDAO.testDTO1);
-        testProducts1.add(TestProductDAO.testDTO2);
-        testProducts1.add(TestProductDAO.testDTO3);
-        testProducts1.add(TestProductDAO.testDTO4);
-
-        testProducts2.add(TestProductDAO.testDTO2);
-        testProducts2.add(TestProductDAO.testDTO3);
-        testProducts2.add(TestProductDAO.testDTO4);
-
-        testProducts3.add(TestProductDAO.testDTO1);
-        testProducts3.add(TestProductDAO.testDTO2);
-
-        testDTO1 = new OrderDetailDTO(1L, OrderStatus.NEW, testProducts1, BigDecimal.valueOf(2));
-        testDTO2 = new OrderDetailDTO(2L, OrderStatus.COMPLETE, testProducts3, BigDecimal.valueOf(65));
-        testDTO3 = new OrderDetailDTO(3L, OrderStatus.NEW, testProducts3, BigDecimal.valueOf(1985));
-        testDTO4 = new OrderDetailDTO(4L, OrderStatus.PROCESSING, testProducts2, BigDecimal.valueOf(1111));
-        testDTOs.add(testDTO1);
-        testDTOs.add(testDTO2);
-        testDTOs.add(testDTO3);
-        testDTOs.add(testDTO4);
-
         postgreSQLTestContainer.start();
         recreateTables();
     }
@@ -93,7 +99,7 @@ public class TestOrderDetailDAO {
     @Test
     public void getAllDAOtest() {
         List<OrderDetailDTO> resultData = dao.getAll();
-        assertEquals(resultData.size(), testDTOs.size());
+        assertEquals(resultData.toString(), testDTOs.toString());
 
         assertEquals(testDTOs.toString(), resultData.toString());
     }
@@ -106,9 +112,7 @@ public class TestOrderDetailDAO {
 
     @Test
     public void updateDAOtest(){
-        List<ProductDTO> updateTestProducts = new ArrayList<>();
-        updateTestProducts.add(TestProductDAO.testDTO2);
-        updateTestProducts.add(TestProductDAO.testDTO4);
+        List<ProductDTO> updateTestProducts = Arrays.asList(TestProductDAO.testDTO2, TestProductDAO.testDTO4);
 
         OrderDetailDTO testDetailDTO = new OrderDetailDTO(
                 3L, OrderStatus.PROCESSING,updateTestProducts, BigDecimal.valueOf(666));

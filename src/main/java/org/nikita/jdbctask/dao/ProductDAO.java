@@ -35,7 +35,7 @@ public class ProductDAO implements DAO<ProductDTO> {
                 statement.setBoolean(4, product.getAvailability());
                 statement.addBatch();
             }
-            if (statement.executeUpdate() != 1) throw new SQLException();
+            statement.executeBatch();
         } catch (SQLException e){
             System.out.println("Could not create products, SQLException: " + e);
         }
