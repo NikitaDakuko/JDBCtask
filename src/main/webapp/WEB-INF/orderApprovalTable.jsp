@@ -39,10 +39,10 @@
                 </td>
                 <td> ${record.getOrderDetail().getTotalAmount()} </td>
                 <td>
-                    <a href="editProduct?id=${record.getId()}">
+                    <a href="editOrderApproval?id=${record.getId()}">
                         <button onclick=> Edit </button>
                     </a>
-                    <a href="deleteProduct?id=${record.getId()}">
+                    <a href="deleteOrderApproval?id=${record.getId()}">
                         <button onclick=> Delete </button>
                     </a>
                 </td>

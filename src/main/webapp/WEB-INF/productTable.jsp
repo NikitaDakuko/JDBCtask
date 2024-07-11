@@ -27,10 +27,10 @@
                 <td> ${record.getQuantity()} </td>
                 <td> ${record.getAvailability()} </td>
                 <td>
-                    <a href="editOrderApproval?id=${record.getId()}">
+                    <a href="editProduct?id=${record.getId()}">
                         <button onclick=> Edit </button>
                     </a>
-                    <a href="deleteOrderApproval?id=${record.getId()}">
+                    <a href="deleteProduct?id=${record.getId()}">
                         <button onclick=> Delete </button>
                     </a>
                 </td>
