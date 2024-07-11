@@ -6,6 +6,7 @@ import org.nikita.jdbctask.dto.OrderDetailDTO;
 import org.nikita.jdbctask.enums.OrderStatus;
 import org.nikita.jdbctask.interfaces.DTOmapper;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Arrays;
 
 public class OrderApprovalDTOMapper implements DTOmapper<OrderApprovalDTO> {
     @Override
-    public OrderApprovalDTO fromResult(ResultSet resultSet) {
+    public OrderApprovalDTO fromResult(ResultSet resultSet, Connection connection) {
         try {
             if (resultSet != null){
                 return new OrderApprovalDTO(
@@ -21,7 +22,7 @@ public class OrderApprovalDTOMapper implements DTOmapper<OrderApprovalDTO> {
                         new OrderDetailDTO(
                                 resultSet.getLong("orderDetailId"),
                                 OrderStatus.valueOf(resultSet.getString("orderStatus")),
-                                new ProductDAO().getMultiple(
+                                new ProductDAO(connection).getMultiple(
                                         new ArrayList<>(Arrays.asList((Long[]) resultSet.getArray("productIds").getArray()))),
                                 resultSet.getBigDecimal("totalAmount")
                 ));

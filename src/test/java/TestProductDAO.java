@@ -71,8 +71,7 @@ public class TestProductDAO {
         testData.add(testDTO3);
         testData.add(testDTO4);
 
-        for (int i = 0; i<testData.size();i++)
-            assertEquals(testData.get(i).toString(), resultData.get(i).toString());
+        assertEquals(testData.toString(), resultData.toString());
     }
 
     @Test
@@ -87,13 +86,12 @@ public class TestProductDAO {
         testData.add(testDTO1);
         testData.add(testDTO2);
         List<Long> idArray = new ArrayList<>();
-        for(ProductDTO p : testData)
+        for (ProductDTO p : testData)
             idArray.add(p.getId());
 
         List<ProductDTO> resultData = productDAO.getMultiple(idArray);
 
-        for (int i = 0; i<testData.size();i++)
-            assertEquals(testData.get(i).toString(), resultData.get(i).toString());
+        assertEquals(testData.toString(), resultData.toString());
     }
 
     @Test

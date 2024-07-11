@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TestOrderDetailDAO {
     static Connection connection = TestDatabaseConfig.getConnection();
@@ -48,12 +49,13 @@ public class TestOrderDetailDAO {
         testProducts3.add(TestProductDAO.testDTO1);
         testProducts3.add(TestProductDAO.testDTO2);
 
-        testDTO1 = new OrderDetailDTO(OrderStatus.NEW, testProducts1, BigDecimal.valueOf(2));
-        testDTO2 = new OrderDetailDTO(OrderStatus.COMPLETE, testProducts3, BigDecimal.valueOf(65));
-        testDTO3 = new OrderDetailDTO(OrderStatus.NEW, testProducts1, BigDecimal.valueOf(1985));
-        testDTO4 = new OrderDetailDTO(OrderStatus.PROCESSING, testProducts2, BigDecimal.valueOf(1111));
+        testDTO1 = new OrderDetailDTO(1L, OrderStatus.NEW, testProducts1, BigDecimal.valueOf(2));
+        testDTO2 = new OrderDetailDTO(2L, OrderStatus.COMPLETE, testProducts3, BigDecimal.valueOf(65));
+        testDTO3 = new OrderDetailDTO(3L, OrderStatus.NEW, testProducts3, BigDecimal.valueOf(1985));
+        testDTO4 = new OrderDetailDTO(4L, OrderStatus.PROCESSING, testProducts2, BigDecimal.valueOf(1111));
         testDTOs.add(testDTO1);
         testDTOs.add(testDTO2);
+        testDTOs.add(testDTO3);
         testDTOs.add(testDTO4);
 
         postgreSQLTestContainer.start();
@@ -84,23 +86,36 @@ public class TestOrderDetailDAO {
 
     @Test
     void createDAOtest() {
-        assertEquals(4L, dao.create(testDTO3).get(0));
         assertEquals(4, dao.getAll().size());
+        assertEquals(5L, dao.create(testDTO3).get(0));
     }
 
-    //@Test
+    @Test
     public void getAllDAOtest() {
         List<OrderDetailDTO> resultData = dao.getAll();
         assertEquals(resultData.size(), testDTOs.size());
 
-        for (int i = 0; i<testDTOs.size();i++)
-            isEqual(testDTOs.get(i), resultData.get(i));
+        assertEquals(testDTOs.toString(), resultData.toString());
     }
 
-    //@Test
+    @Test
     public void findByIdDAOtest() {
         OrderDetailDTO testDTO = dao.findById(2L);
-        isEqual(testDTO2, testDTO);
+        assertEquals(testDTO2.toString(), testDTO.toString());
+    }
+
+    @Test
+    public void updateDAOtest(){
+        List<ProductDTO> updateTestProducts = new ArrayList<>();
+        updateTestProducts.add(TestProductDAO.testDTO2);
+        updateTestProducts.add(TestProductDAO.testDTO4);
+
+        OrderDetailDTO testDetailDTO = new OrderDetailDTO(
+                3L, OrderStatus.PROCESSING,updateTestProducts, BigDecimal.valueOf(666));
+
+        assertNotEquals(testDetailDTO.toString(), dao.findById(3L).toString());
+        dao.update(testDetailDTO);
+        assertEquals(testDetailDTO.toString(), dao.findById(3L).toString());
     }
 
     @Test
@@ -108,17 +123,5 @@ public class TestOrderDetailDAO {
         int currentSize = dao.getAll().size();
         dao.delete(1L);
         assertEquals(currentSize - 1, dao.getAll().size());
-    }
-
-    private void isEqual(OrderDetailDTO dto1, OrderDetailDTO dto2){
-        assertEquals(dto1.getOrderStatus(), dto2.getOrderStatus());
-        assertEquals(dto1.getTotalAmount(), dto2.getTotalAmount());
-        List<ProductDTO> products1 = dto1.getProducts();
-        List<ProductDTO> products2 = dto2.getProducts();
-
-        assertEquals(products1.size(), products2.size());
-        for (int i = 0; i < products1.size(); i++) {
-            assertEquals(products1.get(i).getId(), products2.get(i).getId());
-        }
     }
 }

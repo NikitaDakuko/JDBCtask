@@ -64,7 +64,7 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
                             "GROUP by od.id;"
             );
             statement.setLong(1, id);
-            List<OrderDetailDTO> dtos = mapper.listFromResult(statement.executeQuery());
+            List<OrderDetailDTO> dtos = mapper.listFromResult(statement.executeQuery(), connection);
             if (dtos.isEmpty())
                 throw new SQLException("There are no order details with ID =" + id);
             return dtos.get(0);
@@ -84,7 +84,7 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
                             "ON od.id = op.\"orderDetailId\"\n" +
                             "GROUP by od.id;"
             );
-            return mapper.listFromResult(statement.executeQuery());
+            return mapper.listFromResult(statement.executeQuery(), connection);
         } catch (SQLException e) {
             System.out.println("Could not get all order details, SQLException: " + e);
             return null;
@@ -95,11 +95,15 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
     public void update(List<OrderDetailDTO> orderDetails) {
         try {
             PreparedStatement updateOrderDetail = connection.prepareStatement(
-                    "UPDATE " + DatabaseConfig.orderProductTableName +
-                            "SET \"totalAmount\"=?, \"orderStatus\"=?\n" +
-                            "WHERE \"orderDetailId\"=?" + orderDetails.get(0).getId());
+                    "UPDATE " + DatabaseConfig.orderDetailTableName +
+                            "\nSET \"totalAmount\"=?, \"orderStatus\"=?" +
+                            "\nWHERE id=?"
+            );
 
-            List<Long> ids = new ArrayList<>();
+            PreparedStatement deleteOrderProduct = connection.prepareStatement(
+                    "DELETE FROM " + DatabaseConfig.orderProductTableName +
+                            "\n WHERE \"orderDetailId\" = ?"
+            );
 
             for (OrderDetailDTO dto : orderDetails) {
                 updateOrderDetail.setBigDecimal(1, dto.getTotalAmount());
@@ -107,14 +111,15 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
                 updateOrderDetail.setLong(3, dto.getId());
                 updateOrderDetail.addBatch();;
 
-                ids.add(dto.getId());
+                deleteOrderProduct.setLong(1, dto.getId());
+                deleteOrderProduct.addBatch();
             }
             updateOrderDetail.executeUpdate();
-            defaultDelete(connection, DatabaseConfig.orderProductTableName, ids);
+            deleteOrderProduct.execute();
             createOrderProducts(orderDetails);
 
         } catch (SQLException e) {
-            System.out.println("Could not delete order details, SQLException: " + e);
+            System.out.println("Could not update order details, SQLException: " + e);
         }
     }
 

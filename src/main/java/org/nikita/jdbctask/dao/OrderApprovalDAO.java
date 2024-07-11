@@ -68,7 +68,7 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
                             "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id;"
             );
             statement.setLong(1, id);
-            List<OrderApprovalDTO> dtos = mapper.listFromResult(statement.executeQuery());
+            List<OrderApprovalDTO> dtos = mapper.listFromResult(statement.executeQuery(), connection);
             if (dtos.isEmpty())
                 throw new SQLException("There are no order approvals with ID =" + id);
             return dtos.get(0);
@@ -90,7 +90,7 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
                             "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
                             "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id;"
             );
-            return mapper.listFromResult(statement.executeQuery());
+            return mapper.listFromResult(statement.executeQuery(), connection);
         } catch (SQLException e) {
             System.out.println("Could not get order approvals, SQLException: " + e);
             return null;
