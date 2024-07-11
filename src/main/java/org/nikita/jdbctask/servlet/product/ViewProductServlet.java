@@ -29,7 +29,7 @@ public class ViewProductServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         servletContext.setAttribute("tableName", "Products");
-        servletContext.setAttribute("table", formTable(productList));
+        servletContext.setAttribute("records", productList);
 
         getServletContext().getRequestDispatcher("/WEB-INF/table.jsp").forward(req, resp);
     }
