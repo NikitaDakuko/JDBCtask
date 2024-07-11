@@ -30,7 +30,7 @@ public class ViewProductServlet extends HttpServlet {
         req.setAttribute("tableName", "Products");
         req.setAttribute("table", formTable(productList));
 
-        getServletContext().getRequestDispatcher("/table.jsp").forward(req, resp);
+        getServletContext().getRequestDispatcher("/WEB-INF/table.jsp").forward(req, resp);
     }
 
     private String formTable(List<ProductDTO> productDTOS) {
