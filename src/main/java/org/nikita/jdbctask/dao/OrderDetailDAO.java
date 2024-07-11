@@ -82,7 +82,8 @@ public class OrderDetailDAO implements DAO<OrderDetailDTO> {
                             " FROM " + DatabaseConfig.orderDetailTableName + " od\n" +
                             "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
                             "ON od.id = op.\"orderDetailId\"\n" +
-                            "GROUP by od.id;"
+                            "GROUP by od.id\n" +
+                            "ORDER by oa.id;"
             );
             return mapper.listFromResult(statement.executeQuery(), connection);
         } catch (SQLException e) {

@@ -7,7 +7,8 @@ import java.util.List;
 public interface DAO<T> {
     default ResultSet defaultFindById(Connection connection, String tableName, Long id) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName + " WHERE id = ?");
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM " + tableName + " WHERE id = ?");
             statement.setLong(1, id);
             return statement.executeQuery();
         } catch (SQLException e) {
@@ -18,7 +19,8 @@ public interface DAO<T> {
 
     default ResultSet defaultGetAll(Connection connection, String tableName) {
         try {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tableName);
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM " + tableName + "\n\"ORDER by oa.id;\"");
             return statement.executeQuery();
         } catch (SQLException e) {
             System.out.println("Could not get " + tableName + " records, SQLException: " + e);

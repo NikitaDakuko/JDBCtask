@@ -88,7 +88,8 @@ public class OrderApprovalDAO implements DAO<OrderApprovalDTO> {
                             "ON od.id = oa.\"orderDetailId\"" +
                             "JOIN " + DatabaseConfig.orderProductTableName + " op\n" +
                             "ON oa.\"orderDetailId\" = op.\"orderDetailId\"\n" +
-                            "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id;"
+                            "GROUP by oa.\"orderDetailId\", od.\"orderStatus\",od.\"totalAmount\", oa.id\n" +
+                            "ORDER by oa.id;"
             );
             return mapper.listFromResult(statement.executeQuery(), connection);
         } catch (SQLException e) {
