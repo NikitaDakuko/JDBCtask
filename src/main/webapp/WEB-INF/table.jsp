@@ -16,6 +16,7 @@
             <td> Price </td>
             <td> Quantity </td>
             <td> Availability </td>
+            <td> Actions </td>
         </tr>
 
         <c:forEach items="${records}" var="record">
@@ -25,6 +26,10 @@
                 <td> ${record.getPrice()} </td>
                 <td> ${record.getQuantity()} </td>
                 <td> ${record.getAvailability()} </td>
+                <td>
+                    <button onclick="editProduct?id=${record.getId()}"> Edit </button>
+                    <button onclick="deleteProduct?id=${record.getId()}"> Delete </button>
+                </td>
             </tr>
         </c:forEach>
     </table>
