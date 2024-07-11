@@ -36,6 +36,21 @@ public interface DAO<T> {
         }
     }
 
+    default void defaultDelete(Connection connection, String tableName, List<Long> ids) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(
+                    "DELETE FROM " + tableName +
+                            " WHERE id IN ?");
+            Array idArray = connection.createArrayOf("integer", ids.toArray());
+            statement.setArray(1, idArray);
+
+            if (statement.executeUpdate()!= 1) throw new SQLException();
+
+        } catch (SQLException e) {
+            System.out.println("Could not delete " + tableName + " records with IDs: " + ids + ", SQLException: " + e);
+        }
+    }
+
     default List<Long> returnId(ResultSet resultSet) {
         try {
             List<Long> insertedIds = new ArrayList<>();
