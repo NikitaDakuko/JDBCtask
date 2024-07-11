@@ -9,17 +9,24 @@
     <title>${tableName}</title>
 </head>
 <body>
-      <table>
+    <table>
+        <tr>
+            <td> ID </td>
+            <td> Name </td>
+            <td> Price </td>
+            <td> Quantity </td>
+            <td> Availability </td>
+        </tr>
+
         <c:forEach items="${records}" var="record">
-           <tr>
-           <td> test </td>
-            <td> ${record.getId()} </td>
-            <td> ${record.getName()} </td>
-            <td> ${record.getPrice()} </td>
-            <td> ${record.getQuantity()} </td>
-            <td> ${record.getAvailability()} </td>
-           </tr>
+            <tr>
+                <td> ${record.getId()} </td>
+                <td> ${record.getName()} </td>
+                <td> ${record.getPrice()} </td>
+                <td> ${record.getQuantity()} </td>
+                <td> ${record.getAvailability()} </td>
+            </tr>
         </c:forEach>
-      </table>
+    </table>
 </body>
 </html>
