@@ -10,7 +10,6 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,15 +78,8 @@ public class TestOrderDetailDAO {
     }
 
     static void recreateTables(){
-        try {
-            TestDatabaseConfig.recreateOrderDetailTable(connection);
-            TestProductDAO.recreateDAO();
-            TestDatabaseConfig.recreateOrderProductTable(connection);
-            dao.create(testDTOs);
-        } catch (SQLException e) {
-            System.out.println("SQLException: " + e);
-            throw new RuntimeException(e);
-        }
+        TestProductDAO.recreateDAO();
+        dao.create(testDTOs);
     }
 
     @Test

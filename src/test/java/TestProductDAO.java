@@ -2,6 +2,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.nikita.jdbctask.DatabaseConfig;
 import org.nikita.jdbctask.dao.ProductDAO;
 import org.nikita.jdbctask.dto.ProductDTO;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -48,7 +49,7 @@ public class TestProductDAO {
 
     static void recreateDAO(){
         try {
-            TestDatabaseConfig.recreateProductsTable(connection);
+            DatabaseConfig.recreateSchema(connection);
             productDAO.create(testDTOs);
         }
         catch (SQLException e){
