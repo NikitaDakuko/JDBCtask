@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class TestProductDAO {
     static Connection connection = TestDatabaseConfig.getConnection();
@@ -65,20 +66,19 @@ public class TestProductDAO {
     public void getAllDAOtest() {
         List<ProductDTO> testData = new ArrayList<>();
         List<ProductDTO> resultData = productDAO.getAll();
-        System.out.println(resultData);
         testData.add(testDTO1);
         testData.add(testDTO2);
         testData.add(testDTO3);
         testData.add(testDTO4);
 
         for (int i = 0; i<testData.size();i++)
-            isEqual(testData.get(i), resultData.get(i));
+            assertEquals(testData.get(i).toString(), resultData.get(i).toString());
     }
 
     @Test
     public void findByIdDAOtest() {
         ProductDTO testDTO = productDAO.findById(testDTO3.getId());
-        isEqual(testDTO3, testDTO);
+        assertEquals(testDTO3.toString(), testDTO.toString());
     }
 
     @Test
@@ -93,7 +93,21 @@ public class TestProductDAO {
         List<ProductDTO> resultData = productDAO.getMultiple(idArray);
 
         for (int i = 0; i<testData.size();i++)
-            isEqual(testData.get(i), resultData.get(i));
+            assertEquals(testData.get(i).toString(), resultData.get(i).toString());
+    }
+
+    @Test
+    public void updateDAOtest(){
+        ProductDTO testProduct = new ProductDTO(2L, "update test", BigDecimal.valueOf(2), 555, true);
+
+        assertNotEquals(
+                productDAO.findById(testProduct.getId()).toString(),
+                testProduct.toString());
+
+        productDAO.update(testProduct);
+        assertEquals(
+                productDAO.findById(testProduct.getId()).toString(),
+                testProduct.toString());
     }
 
     @Test
@@ -101,13 +115,5 @@ public class TestProductDAO {
         int currentSize = productDAO.getAll().size();
         productDAO.delete(1L);
         assertEquals(currentSize - 1, productDAO.getAll().size());
-    }
-
-    private void isEqual(ProductDTO dto1, ProductDTO dto2){
-        assertEquals(dto1.getId(), dto2.getId());
-        assertEquals(dto1.getName(), dto2.getName());
-        assertEquals(dto1.getPrice(), dto2.getPrice());
-        assertEquals(dto1.getQuantity(), dto2.getQuantity());
-        assertEquals(dto1.getAvailability(),dto2.getAvailability());
     }
 }

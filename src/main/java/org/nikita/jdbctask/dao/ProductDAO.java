@@ -75,11 +75,11 @@ public class ProductDAO implements DAO<ProductDTO> {
                             " WHERE id = ?");
 
             for (ProductDTO product : products) {
-                statement.setLong(1, product.getId());
-                statement.setString(2, product.getName());
-                statement.setBigDecimal(3, product.getPrice());
-                statement.setLong(4, product.getQuantity());
-                statement.setBoolean(5, product.getAvailability());
+                statement.setString(1, product.getName());
+                statement.setBigDecimal(2, product.getPrice());
+                statement.setLong(3, product.getQuantity());
+                statement.setBoolean(4, product.getAvailability());
+                statement.setLong(5, product.getId());
                 statement.addBatch();
             }
             if (statement.executeUpdate() != 1) throw new SQLException();
