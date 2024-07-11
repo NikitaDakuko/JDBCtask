@@ -17,6 +17,6 @@ public class DeleteProductServlet extends HttpServlet {
         Long id = Long.parseLong(req.getParameter("id"));
         ProductDAO dao = new ProductDAO();
         dao.delete(id);
-        req.getRequestDispatcher("/products").forward(req, resp);
+        req.getRequestDispatcher("products").forward(req, resp);
     }
 }

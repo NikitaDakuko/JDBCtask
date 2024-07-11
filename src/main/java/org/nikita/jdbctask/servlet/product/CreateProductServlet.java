@@ -29,6 +29,6 @@ public class CreateProductServlet extends HttpServlet {
 
         ProductDAO dao = new ProductDAO();
         dao.create(p);
-        resp.getOutputStream().println(p.toString());
+        req.getRequestDispatcher("products").forward(req, resp);
     }
 }
