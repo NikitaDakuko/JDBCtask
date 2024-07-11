@@ -27,15 +27,18 @@
                 <td> ${record.getQuantity()} </td>
                 <td> ${record.getAvailability()} </td>
                 <td>
-                    <a href="editProduct?id=${record.getId()}">
+                    <a href="editOrderApproval?id=${record.getId()}">
                         <button onclick=> Edit </button>
                     </a>
-                    <a href="deleteProduct?id=${record.getId()}">
+                    <a href="deleteOrderApproval?id=${record.getId()}">
                         <button onclick=> Delete </button>
                     </a>
                 </td>
             </tr>
         </c:forEach>
     </table>
+    <a href="createProduct">
+        <button onclick=> Add product </button>
+    </a>
 </body>
 </html>

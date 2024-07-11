@@ -79,11 +79,11 @@ public class TestDatabaseConfig {
                         "    CONSTRAINT \"orderDetailId\" FOREIGN KEY (\"orderDetailId\")\n" +
                         "        REFERENCES " + DatabaseConfig.orderDetailTableName + " (id) MATCH SIMPLE\n" +
                         "        ON UPDATE NO ACTION\n" +
-                        "        ON DELETE NO ACTION,\n" +
+                        "        ON DELETE CASCADE,\n" +
                         "    CONSTRAINT \"productId\" FOREIGN KEY (\"productId\")\n" +
                         "        REFERENCES " + DatabaseConfig.productTableName + " (id) MATCH SIMPLE\n" +
                         "        ON UPDATE NO ACTION\n" +
-                        "        ON DELETE NO ACTION\n" +
+                        "        ON DELETE CASCADE\n" +
                         ")").execute();
     }
 
