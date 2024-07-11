@@ -13,11 +13,11 @@
         <c:forEach items="${records}" var="record">
            <tr>
            <td> test </td>
-            <td> ${record.getId} </td>
-            <td> ${record.getName} </td>
-            <td> ${record.getPrice} </td>
-            <td> ${record.getQuantity} </td>
-            <td> ${record.getAvailability} </td>
+            <td> ${record.getId()} </td>
+            <td> ${record.getName()} </td>
+            <td> ${record.getPrice()} </td>
+            <td> ${record.getQuantity()} </td>
+            <td> ${record.getAvailability()} </td>
            </tr>
         </c:forEach>
       </table>
