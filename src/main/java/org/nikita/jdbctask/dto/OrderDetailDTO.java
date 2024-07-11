@@ -33,7 +33,7 @@ public class OrderDetailDTO implements Serializable {
         return "OrderDetail:{" +
                 "\n\tid: " + id +
                 ",\n\torderStatus: " + orderStatus +
-                ",\n\tproducts: " + productString +
+                ",\n\tproducts: \n" + productString +
                 ",\n\ttotalAmount: " + totalAmount.toString() + "\n} ";
     }
 

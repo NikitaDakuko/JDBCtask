@@ -26,6 +26,32 @@ public class ViewProductServlet extends HttpServlet {
             productList = dao.getAll();
         }
         resp.getOutputStream().println(productList.toString());
+
+        req.setAttribute("tableName", "Products");
+        req.setAttribute("table", formTable(productList));
+
+        getServletContext().getRequestDispatcher("/table.jsp").forward(req, resp);
+    }
+
+    private String formTable(List<ProductDTO> productDTOS) {
+        StringBuilder table = new StringBuilder(
+                "<td>id</td>\n" +
+                        "<td>name</td>\n" +
+                        "<td>price</td>\n" +
+                        "<td>quantity</td>\n" +
+                        "<td>available</td>\n" +
+                        "<td>actions</td>\n"
+        );
+
+        for (ProductDTO p : productDTOS) {
+            table.append("<td>").append(p.getId()).append("</td>\n")
+                    .append("<td>").append(p.getName()).append("</td>\n")
+                    .append("<td>").append(p.getPrice()).append("</td>\n")
+                    .append("<td>").append(p.getQuantity()).append("</td>\n")
+                    .append("<td>").append(p.getAvailability() ? "Available" : "Unavailable").append("</td>\n")
+                    .append("<td> edit delete </td>\n");
+        }
+        return table.toString();
     }
 }
 
